@@ -11,16 +11,44 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ToDoList">
+
         <activity
-            android:name=".MainActivity"
-            android:exported="true"
-            android:windowSoftInputMode="adjustResize">
+            android:name=".InterfazCarga"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".InterfazLogin"
+            android:exported="false" />
+
+        <activity
+            android:name=".InterfazRegistro"
+            android:exported="false" />
+
+        <activity
+            android:name=".InterfazLista"
+            android:exported="false" />
+
+        <activity
+            android:name=".InterfazCalendario"
+            android:exported="false" />
+
+        <activity
+            android:name=".InterfazCategoria"
+            android:exported="false" />
+
+        <activity
+            android:name=".InterfazPapelera"
+            android:exported="false" />
+
+        <activity
+            android:name=".InterfazUsuario"
+            android:exported="false" />
+
     </application>
 
 </manifest>
