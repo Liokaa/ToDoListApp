@@ -1,47 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
-    android:padding="16dp">
+    android:background="#FAF5EA">
 
     <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Iniciar Sesión"
-        android:textSize="24sp"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:background="@drawable/bg_top_header"
+        android:text="Inicio Sesión"
+        android:textSize="34sp"
         android:textStyle="bold"
-        android:layout_marginBottom="24dp" />
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:layout_marginBottom="16dp" />
 
-    <EditText
-        android:id="@+id/etUser"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Usuario"
-        android:inputType="text"
-        android:layout_marginBottom="12dp" />
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-    <EditText
-        android:id="@+id/etPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Contraseña"
-        android:inputType="textPassword"
-        android:layout_marginBottom="24dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
 
-    <Button
-        android:id="@+id/btnLogin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Iniciar Sesión"
-        android:layout_marginBottom="8dp" />
 
-    <Button
-        android:id="@+id/btnRegister"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Registrarse" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Usuario/correo :"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="#2D3748"
+                android:layout_marginBottom="8dp" />
+
+            <EditText
+                android:id="@+id/ingresaUsuario"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:background="@drawable/bg_rounded_input"
+                android:paddingHorizontal="20dp"
+                android:inputType="textEmailAddress"
+                android:textSize="18sp"
+                android:textColor="#1A202C"
+                android:layout_marginBottom="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Contraseña:"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="#2D3748"
+                android:layout_marginBottom="8dp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:hintEnabled="false"
+                app:endIconMode="password_toggle"
+                app:endIconTint="#4A5568"
+                app:boxBackgroundMode="none"
+                android:layout_marginBottom="8dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/Password"
+                    android:layout_width="match_parent"
+                    android:layout_height="54dp"
+                    android:background="@drawable/bg_rounded_input"
+                    android:paddingHorizontal="20dp"
+                    android:paddingEnd="48dp"
+                    android:inputType="textPassword"
+                    android:textSize="18sp"
+                    android:textColor="#1A202C" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <TextView
+                android:id="@+id/btnRegister"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="Registrate>"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="#3D6C90"
+                android:padding="8dp"
+                android:layout_marginBottom="24dp"
+                android:clickable="true"
+                android:focusable="true" />
+
+
+            <android.widget.Button
+                android:id="@+id/btnLogin"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:background="@drawable/bg_btn_primary"
+                android:text="Iniciar Sesión"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="28dp" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="o continuar con"
+                android:textSize="20sp"
+                android:textColor="#4A5568"
+                android:layout_marginBottom="20dp" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/btnGoogle"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_google"
+                    android:layout_marginEnd="24dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:contentDescription="Google" />
+
+                <ImageView
+                    android:id="@+id/btnFacebook"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_facebook"
+                    android:layout_marginEnd="24dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:contentDescription="Facebook" />
+
+                <ImageView
+                    android:id="@+id/btnInstagram"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/insta"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:contentDescription="Instagram" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
