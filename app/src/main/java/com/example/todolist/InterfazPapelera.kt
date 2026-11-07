@@ -1,34 +1,70 @@
 package com.example.todolist
 
-import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
+import android.text.Editable
+import android.text.TextWatcher
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 class InterfazPapelera : AppCompatActivity() {
+    private lateinit var rvPapelera: RecyclerView
+    private lateinit var etBuscar: EditText
+    private lateinit var adapter: PapeleraAdapter
+
+    private val listaOriginal = mutableListOf<ElementoPapelera>()
+    private val listaFiltrada = mutableListOf<ElementoPapelera>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_interfaz_papelera)
 
-        val btnLista = findViewById<Button>(R.id.btnLista)
-        val btnCalendario = findViewById<Button>(R.id.btnCalendario)
-        val btnCategoria = findViewById<Button>(R.id.btnCategoria)
-        val btnUsuario = findViewById<Button>(R.id.btnUsuario)
+        rvPapelera = findViewById(R.id.rvPapelera)
+        etBuscar = findViewById(R.id.etBuscar)
 
-        btnLista.setOnClickListener {
-            startActivity(Intent(this, InterfazLista::class.java))
-        }
+        rvPapelera.layoutManager = LinearLayoutManager(this)
 
-        btnCalendario.setOnClickListener {
-            startActivity(Intent(this, InterfazCalendario::class.java))
+        adapter = PapeleraAdapter(listaFiltrada) { itemAEliminar ->
+            listaOriginal.remove(itemAEliminar)
+            filtrar(etBuscar.text.toString())
         }
+        rvPapelera.adapter = adapter
 
-        btnCategoria.setOnClickListener {
-            startActivity(Intent(this, InterfazCategoria::class.java))
-        }
+        etBuscar.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
-        btnUsuario.setOnClickListener {
-            startActivity(Intent(this, InterfazUsuario::class.java))
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                filtrar(s.toString())
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
+        agregarElementoDinamico("Nombre Tarea", "Descripción de la tarea")
+        agregarElementoDinamico("Ejemplo", "Esto es un ejemplo")
+        agregarElementoDinamico("Ejemplo 2", "Esto es un ejemplo 2")
+    }
+
+    fun agregarElementoDinamico(nombre: String, descripcion: String) {
+        val nuevoItem = ElementoPapelera(nombre, descripcion)
+        listaOriginal.add(nuevoItem)
+        filtrar(etBuscar.text.toString())
+    }
+
+    private fun filtrar(texto: String) {
+        val busqueda = texto.trim().lowercase()
+        listaFiltrada.clear()
+
+        if (busqueda.isEmpty()) {
+            listaFiltrada.addAll(listaOriginal)
+        } else {
+            val resultado = listaOriginal.filter { item ->
+                item.nombre.lowercase().contains(busqueda) ||
+                item.descripcion.lowercase().contains(busqueda)
+            }
+            listaFiltrada.addAll(resultado)
         }
+        adapter.notifyDataSetChanged()
     }
 }

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    android:background="@drawable/bg_item_papelera"
+    android:padding="12dp">
+
+    <ImageView
+        android:id="@+id/btnEliminarItem"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:contentDescription="Eliminar"
+        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+    <TextView
+        android:id="@+id/tvNombreItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@id/btnEliminarItem"
+        android:text="Nombre"
+        android:textColor="#000"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+    <TextView
+        android:id="@+id/tvDescripcionItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvNombreItem"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="4dp"
+        android:text="Descripcion"
+        android:textColor="#444"
+        android:textSize="16sp"/>
+
+</RelativeLayout>
