@@ -4,23 +4,52 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class InterfazLogin : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_interfaz_login)
 
+        val etUser = findViewById<EditText>(R.id.ingresaUsuario)
+        val etPassword = findViewById<EditText>(R.id.Password)
         val btnLogin = findViewById<View>(R.id.btnLogin)
         val btnRegister = findViewById<View>(R.id.btnRegister)
         val btnGoogle = findViewById<ImageView>(R.id.btnGoogle)
         val btnFacebook = findViewById<ImageView>(R.id.btnFacebook)
         val btnInstagram = findViewById<ImageView>(R.id.btnInstagram)
 
+        val db = AppDatabase.getDatabase(this)
+
         btnLogin.setOnClickListener {
-            val intent = Intent(this, InterfazLista::class.java)
-            startActivity(intent)
+            val userOrEmail = etUser.text.toString().trim()
+            val pass = etPassword.text.toString().trim()
+
+            if (userOrEmail.isEmpty() || pass.isEmpty()) {
+                Toast.makeText(this, "Ingresa tu usuario y contraseña", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            lifecycleScope.launch(Dispatchers.IO) {
+                val usuarioEncontrado = db.usuarioDao().login(userOrEmail, pass)
+                withContext(Dispatchers.Main) {
+                    if (usuarioEncontrado != null) {
+                        Toast.makeText(this@InterfazLogin, "¡Bienvenido ${usuarioEncontrado.usuario}!", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this@InterfazLogin, InterfazLista::class.java)
+                        startActivity(intent)
+                        finish()
+                    } else {
+                        Toast.makeText(this@InterfazLogin, "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
         }
 
         btnRegister.setOnClickListener {
