@@ -6,29 +6,43 @@
     android:layout_marginHorizontal="8dp"
     android:layout_marginVertical="4dp"
     app:cardCornerRadius="8dp"
-    app:cardElevation="2dp">
+    app:cardElevation="3dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="12dp">
+        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tvNombre"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Nombre Categoria"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+        <!-- Barra indicador de color de la categoría -->
+        <View
+            android:id="@+id/viewColorBarra"
+            android:layout_width="10dp"
+            android:layout_height="match_parent"
+            android:background="#4A90E2" />
 
-        <TextView
-            android:id="@+id/tvDescripcion"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:text="Descripción de la categoría"
-            android:textColor="#666666"
-            android:textSize="14sp" />
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <TextView
+                android:id="@+id/tvNombre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nombre Categoría"
+                android:textColor="#333333"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvDescripcion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="Descripción de la categoría"
+                android:textColor="#666666"
+                android:textSize="14sp" />
+        </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

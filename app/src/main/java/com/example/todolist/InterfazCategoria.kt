@@ -1,12 +1,10 @@
 package com.example.todolist
 
-import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Button
 import android.widget.EditText
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -20,15 +18,9 @@ import kotlinx.coroutines.launch
 class InterfazCategoria : AppCompatActivity() {
 
     private lateinit var db: AppDatabase
-    private lateinit var rvTareas: RecyclerView
-    private lateinit var adapter: TareaAdapter
+    private lateinit var rvCategorias: RecyclerView
+    private lateinit var adapter: CategoriaAdapter
     private lateinit var etBuscar: EditText
-
-    private lateinit var btnCat1: Button
-    private lateinit var btnCat2: Button
-    private lateinit var btnCat3: Button
-
-    private var categoriaActual: String = "Cat 1"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,38 +30,25 @@ class InterfazCategoria : AppCompatActivity() {
 
         val tvMenu = findViewById<TextView>(R.id.tvMenu)
         val tvUser = findViewById<TextView>(R.id.tvUser)
-        btnCat1 = findViewById(R.id.btnCat1)
-        btnCat2 = findViewById(R.id.btnCat2)
-        btnCat3 = findViewById(R.id.btnCat3)
         val fabAdd = findViewById<FloatingActionButton>(R.id.fabAdd)
         etBuscar = findViewById(R.id.etBuscar)
-        rvTareas = findViewById(R.id.rvTareasCategoria)
+        rvCategorias = findViewById(R.id.rvCategorias)
 
-        // Configurar RecyclerView
-        rvTareas.layoutManager = LinearLayoutManager(this)
-        adapter = TareaAdapter(
-            listaTareas = emptyList(),
-            onCheckChanged = { tarea, estaCompletada ->
-                lifecycleScope.launch {
-                    val actualizada = tarea.copy(completada = estaCompletada)
-                    db.tareaDao().actualizarTarea(actualizada)
-                }
-            },
-            onDeleteClicked = { tarea ->
-                lifecycleScope.launch {
-                    val enPapelera = tarea.copy(enPapelera = true)
-                    db.tareaDao().actualizarTarea(enPapelera)
-                    cargarTareasPorCategoria(categoriaActual)
-                }
+        // Configurar RecyclerView usando CategoriaAdapter
+        rvCategorias.layoutManager = LinearLayoutManager(this)
+        adapter = CategoriaAdapter(
+            listaCategorias = emptyList(),
+            onItemClick = { categoria ->
+                Toast.makeText(this, "Categoría: ${categoria.nombre}", Toast.LENGTH_SHORT).show()
             }
         )
-        rvTareas.adapter = adapter
+        rvCategorias.adapter = adapter
 
-        // Búsqueda en tiempo real
+        // Búsqueda en tiempo real de categorías
         etBuscar.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                filtrarCategorias(s.toString())
+                buscarCategoriasEnRoom(s.toString())
             }
             override fun afterTextChanged(s: Editable?) {}
         })
@@ -80,105 +59,91 @@ class InterfazCategoria : AppCompatActivity() {
             Toast.makeText(this, "Perfil de usuario", Toast.LENGTH_SHORT).show()
         }
 
-        // Filtros de categoría totalmente funcionales
-        btnCat1.setOnClickListener {
-            seleccionarTab("Cat 1", btnCat1)
-        }
-
-        btnCat2.setOnClickListener {
-            seleccionarTab("Cat 2", btnCat2)
-        }
-
-        btnCat3.setOnClickListener {
-            seleccionarTab("Cat 3", btnCat3)
-        }
-
-        // Botón FAB para crear categoría en la DB
+        // Botón '+' para agregar nueva categoría con colores pastel
         fabAdd.setOnClickListener {
             mostrarDialogoNuevaCategoria()
         }
 
-        // Cargar por defecto la primera categoría
-        seleccionarTab("Cat 1", btnCat1)
+        cargarCategorias()
     }
 
-    private fun seleccionarTab(nombreCategoria: String, botonSeleccionado: Button) {
-        categoriaActual = nombreCategoria
-
-        // Cambiar colores visuales de los tabs
-        btnCat1.setBackgroundColor(Color.WHITE)
-        btnCat1.setTextColor(Color.parseColor("#333333"))
-        btnCat2.setBackgroundColor(Color.WHITE)
-        btnCat2.setTextColor(Color.parseColor("#333333"))
-        btnCat3.setBackgroundColor(Color.WHITE)
-        btnCat3.setTextColor(Color.parseColor("#333333"))
-
-        botonSeleccionado.setBackgroundColor(Color.parseColor("#5B73A2"))
-        botonSeleccionado.setTextColor(Color.WHITE)
-
-        cargarTareasPorCategoria(categoriaActual)
-    }
-
-    private fun cargarTareasPorCategoria(cat: String) {
+    private fun cargarCategorias() {
         lifecycleScope.launch {
-            // Usa la consulta obtenerPorCategoria de tu TareaDao
-            val tareas = db.tareaDao().obtenerPorCategoria(cat)
-            adapter.actualizarLista(tareas)
+            val lista = db.categoriaDao().obtenerTodas()
+            adapter.actualizarLista(lista)
         }
     }
 
-    private fun filtrarCategorias(query: String) {
+    private fun buscarCategoriasEnRoom(query: String) {
         lifecycleScope.launch {
-            val tareasCat = db.tareaDao().obtenerPorCategoria(categoriaActual)
             if (query.isBlank()) {
-                adapter.actualizarLista(tareasCat)
+                cargarCategorias()
             } else {
-                val filtradas = tareasCat.filter {
-                    it.titulo.contains(query, ignoreCase = true) ||
-                            it.descripcion.contains(query, ignoreCase = true)
-                }
-                adapter.actualizarLista(filtradas)
+                val listaFiltrada = db.categoriaDao().buscarCategorias(query)
+                adapter.actualizarLista(listaFiltrada)
             }
         }
     }
 
     private fun mostrarDialogoNuevaCategoria() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Nueva Categoría")
+        val dialogView = layoutInflater.inflate(R.layout.dialogo_nueva_categoria, null)
 
-        val layout = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            setPadding(50, 20, 50, 10)
+        val etNombre = dialogView.findViewById<EditText>(R.id.etNombreCategoria)
+        val etDescripcion = dialogView.findViewById<EditText>(R.id.etDescripcionCategoria)
+
+        val btnMorado = dialogView.findViewById<Button>(R.id.btnColorMorado)
+        val btnAmarillo = dialogView.findViewById<Button>(R.id.btnColorAmarillo)
+        val btnRosa = dialogView.findViewById<Button>(R.id.btnColorRosa)
+        val btnAzul = dialogView.findViewById<Button>(R.id.btnColorAzul)
+        val btnVerde = dialogView.findViewById<Button>(R.id.btnColorVerde)
+
+        // Color morado pastel por defecto
+        var colorHexSeleccionado = "#C3B1E1"
+
+        btnMorado.setOnClickListener {
+            colorHexSeleccionado = "#C3B1E1"
+            Toast.makeText(this, "Color Morado Pastel seleccionado", Toast.LENGTH_SHORT).show()
+        }
+        btnAmarillo.setOnClickListener {
+            colorHexSeleccionado = "#FDFD96"
+            Toast.makeText(this, "Color Amarillo Pastel seleccionado", Toast.LENGTH_SHORT).show()
+        }
+        btnRosa.setOnClickListener {
+            colorHexSeleccionado = "#F8C8DC"
+            Toast.makeText(this, "Color Rosa Pastel seleccionado", Toast.LENGTH_SHORT).show()
+        }
+        btnAzul.setOnClickListener {
+            colorHexSeleccionado = "#A2DEFF"
+            Toast.makeText(this, "Color Azul Pastel seleccionado", Toast.LENGTH_SHORT).show()
+        }
+        btnVerde.setOnClickListener {
+            colorHexSeleccionado = "#B2FBA5"
+            Toast.makeText(this, "Color Verde Pastel seleccionado", Toast.LENGTH_SHORT).show()
         }
 
-        val inputNombre = EditText(this).apply { hint = "Nombre de la Categoría" }
-        val inputDescripcion = EditText(this).apply { hint = "Descripción" }
+        AlertDialog.Builder(this)
+            .setView(dialogView)
+            .setPositiveButton("Guardar") { dialog, _ ->
+                val nombre = etNombre.text.toString().trim()
+                val descripcion = etDescripcion.text.toString().trim()
 
-        layout.addView(inputNombre)
-        layout.addView(inputDescripcion)
-        builder.setView(layout)
-
-        builder.setPositiveButton("Guardar") { dialog, _ ->
-            val nombre = inputNombre.text.toString().trim()
-            val descripcion = inputDescripcion.text.toString().trim()
-
-            if (nombre.isNotEmpty()) {
-                lifecycleScope.launch {
-                    val nuevaCat = Categoria(
-                        nombre = nombre,
-                        descripcion = descripcion,
-                        colorHex = "#5B73A2"
-                    )
-                    db.categoriaDao().insertar(nuevaCat)
-                    Toast.makeText(this@InterfazCategoria, "Categoría '$nombre' creada", Toast.LENGTH_SHORT).show()
+                if (nombre.isNotEmpty()) {
+                    lifecycleScope.launch {
+                        val nuevaCat = Categoria(
+                            nombre = nombre,
+                            descripcion = descripcion,
+                            colorHex = colorHexSeleccionado
+                        )
+                        db.categoriaDao().insertar(nuevaCat)
+                        Toast.makeText(this@InterfazCategoria, "Categoría '$nombre' creada", Toast.LENGTH_SHORT).show()
+                        cargarCategorias()
+                    }
+                } else {
+                    Toast.makeText(this, "El nombre no puede estar vacío", Toast.LENGTH_SHORT).show()
                 }
-            } else {
-                Toast.makeText(this, "El nombre no puede estar vacío", Toast.LENGTH_SHORT).show()
+                dialog.dismiss()
             }
-            dialog.dismiss()
-        }
-
-        builder.setNegativeButton("Cancelar") { dialog, _ -> dialog.cancel() }
-        builder.show()
+            .setNegativeButton("Cancelar") { dialog, _ -> dialog.cancel() }
+            .show()
     }
 }

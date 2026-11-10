@@ -54,46 +54,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/layoutTabs"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="#8DF2E0"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/tvMenu">
-
-        <Button
-            android:id="@+id/btnCat1"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="#5B73A2"
-            android:text="Cat 1"
-            android:textColor="#000000" />
-
-        <Button
-            android:id="@+id/btnCat2"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="#FFFFFF"
-            android:text="Cat 2"
-            android:textColor="#333333" />
-
-        <Button
-            android:id="@+id/btnCat3"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="#FFFFFF"
-            android:text="Cat 3"
-            android:textColor="#333333" />
-    </LinearLayout>
-
     <TextView
         android:id="@+id/tvBuscar"
         android:layout_width="wrap_content"
@@ -104,7 +64,7 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutTabs" />
+        app:layout_constraintTop_toBottomOf="@+id/tvMenu" />
 
     <EditText
         android:id="@+id/etBuscar"
@@ -112,7 +72,7 @@
         android:layout_height="45dp"
         android:layout_marginStart="12dp"
         android:background="@android:drawable/editbox_background_normal"
-        android:hint="🔍 Buscar en esta categoría..."
+        android:hint="🔍 Buscar categoría..."
         android:paddingStart="15dp"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/tvBuscar"
@@ -120,15 +80,15 @@
         app:layout_constraintStart_toEndOf="@+id/tvBuscar"
         app:layout_constraintTop_toTopOf="@+id/tvBuscar" />
 
-    <!-- RecyclerView para desplegar dinámicamente las tareas asociadas a la categoría elegida -->
+    <!-- RecyclerView para mostrar las tarjetas de CATEGORÍAS (con nombre, descripción y cuadro de color) -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvTareasCategoria"
+        android:id="@+id/rvCategorias"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvBuscar"
-        tools:listitem="@layout/item_tarea" />
+        tools:listitem="@layout/item_categoria" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAdd"

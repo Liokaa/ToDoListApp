@@ -36,47 +36,52 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="8dp" />
 
-    <!-- Opciones de Colores con Botones/Radios integrados -->
+    <!-- Opciones de Colores Pasteles -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center">
 
-        <Button
-            android:id="@+id/btnColorAzul"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_margin="4dp"
-            android:backgroundTint="#4A90E2" />
-
+        <!-- Morado Pastel (#C3B1E1) -->
         <Button
             android:id="@+id/btnColorMorado"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_margin="4dp"
-            android:backgroundTint="#7E57C2" />
+            android:backgroundTint="#C3B1E1" />
 
+        <!-- Amarillo Pastel (#FDFD96) -->
+        <Button
+            android:id="@+id/btnColorAmarillo"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_margin="4dp"
+            android:backgroundTint="#FDFD96" />
+
+        <!-- Rosa Pastel (#F8C8DC) -->
+        <Button
+            android:id="@+id/btnColorRosa"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_margin="4dp"
+            android:backgroundTint="#F8C8DC" />
+
+        <!-- Azul Pastel (#A2DEFF) -->
+        <Button
+            android:id="@+id/btnColorAzul"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_margin="4dp"
+            android:backgroundTint="#A2DEFF" />
+
+        <!-- Verde Pastel (#B2FBA5) -->
         <Button
             android:id="@+id/btnColorVerde"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_margin="4dp"
-            android:backgroundTint="#66BB6A" />
-
-        <Button
-            android:id="@+id/btnColorNaranja"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_margin="4dp"
-            android:backgroundTint="#FFA726" />
-
-        <Button
-            android:id="@+id/btnColorRojo"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_margin="4dp"
-            android:backgroundTint="#E57373" />
+            android:backgroundTint="#B2FBA5" />
     </LinearLayout>
 
 </LinearLayout>
