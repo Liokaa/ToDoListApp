@@ -12,51 +12,86 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:gravity="center_vertical">
+        android:orientation="horizontal">
 
-        <!-- Checkbox en Azul pastel -->
-        <CheckBox
-            android:id="@+id/cbCompletada"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:buttonTint="#4A90E2" />
+        <!-- 1. Borde/Indicador Lateral de Color según Categoría -->
+        <View
+            android:id="@+id/viewColorCategoria"
+            android:layout_width="6dp"
+            android:layout_height="match_parent"
+            android:background="#4A90E2" />
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_marginStart="8dp">
+            android:orientation="horizontal"
+            android:padding="12dp"
+            android:gravity="center_vertical">
 
-            <TextView
-                android:id="@+id/tvTituloTarea"
+            <!-- Checkbox en Azul pastel -->
+            <CheckBox
+                android:id="@+id/cbCompletada"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Título de la tarea"
-                android:textColor="#333333"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:buttonTint="#4A90E2" />
 
-            <TextView
-                android:id="@+id/tvDescripcionTarea"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Descripción de la tarea"
-                android:textColor="#666666"
-                android:textSize="14sp"
-                android:layout_marginTop="2dp" />
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="8dp">
+
+                <!-- 2. Etiqueta de Categoría (Texto con fondo suave) -->
+                <TextView
+                    android:id="@+id/tvCategoriaTarea"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TRABAJO"
+                    android:textColor="#4A90E2"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.05" />
+
+                <TextView
+                    android:id="@+id/tvTituloTarea"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Título de la tarea"
+                    android:textColor="#333333"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="2dp" />
+
+                <TextView
+                    android:id="@+id/tvDescripcionTarea"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Descripción de la tarea"
+                    android:textColor="#666666"
+                    android:textSize="13sp"
+                    android:layout_marginTop="2dp" />
+
+                <!-- 3. Fecha de la Tarea -->
+                <TextView
+                    android:id="@+id/tvFechaTarea"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📅 2026-03-25"
+                    android:textColor="#888888"
+                    android:textSize="12sp"
+                    android:layout_marginTop="6dp" />
+            </LinearLayout>
+
+            <!-- Botón eliminar original -->
+            <ImageButton
+                android:id="@+id/btnEliminarTarea"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@android:drawable/ic_menu_delete"
+                app:tint="#F48FB1"
+                android:contentDescription="Enviar a papelera" />
         </LinearLayout>
-
-        <!-- Botón enviar a papelera en Rosa Pastel -->
-        <ImageButton
-            android:id="@+id/btnEliminarTarea"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@android:drawable/ic_menu_delete"
-            app:tint="#F48FB1"
-            android:contentDescription="Enviar a papelera" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

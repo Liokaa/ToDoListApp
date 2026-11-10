@@ -1,6 +1,9 @@
 package com.example.todolist
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +16,7 @@ class InterfazPapelera : AppCompatActivity() {
 
     private lateinit var db: AppDatabase
     private lateinit var rvPapelera: RecyclerView
+    private lateinit var etBuscar: EditText
     private lateinit var adapter: PapeleraAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,6 +25,7 @@ class InterfazPapelera : AppCompatActivity() {
 
         db = AppDatabase.getDatabase(this)
         rvPapelera = findViewById(R.id.rvPapelera)
+        etBuscar = findViewById(R.id.etBuscar)
 
         rvPapelera.layoutManager = LinearLayoutManager(this)
         adapter = PapeleraAdapter(
@@ -34,6 +39,15 @@ class InterfazPapelera : AppCompatActivity() {
         )
         rvPapelera.adapter = adapter
 
+        // Escuchador de texto para filtrar la papelera en tiempo real
+        etBuscar.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                filtrarPapelera(s.toString())
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
         cargarTareasPapelera()
     }
 
@@ -41,6 +55,21 @@ class InterfazPapelera : AppCompatActivity() {
         lifecycleScope.launch {
             val tareasEnPapelera = db.tareaDao().obtenerPapelera()
             adapter.actualizarLista(tareasEnPapelera)
+        }
+    }
+
+    private fun filtrarPapelera(query: String) {
+        lifecycleScope.launch {
+            val tareasEnPapelera = db.tareaDao().obtenerPapelera()
+            if (query.isBlank()) {
+                adapter.actualizarLista(tareasEnPapelera)
+            } else {
+                val filtradas = tareasEnPapelera.filter {
+                    it.titulo.contains(query, ignoreCase = true) ||
+                            it.descripcion.contains(query, ignoreCase = true)
+                }
+                adapter.actualizarLista(filtradas)
+            }
         }
     }
 

@@ -27,15 +27,16 @@ class PapeleraAdapter(
 
     override fun onBindViewHolder(holder: PapeleraViewHolder, position: Int) {
         val tarea = listaTareas[position]
-        holder.tvNombre.text = tarea.titulo
-        holder.tvDescripcion.text = tarea.descripcion
 
-        // Al tocar la tarjeta, dar opción de restaurar
+        holder.tvNombre.text = tarea.titulo
+        holder.tvDescripcion.text = if (tarea.descripcion.isNotBlank()) tarea.descripcion else "Sin descripción"
+
+        // Clic en la tarjeta para restaurar
         holder.itemView.setOnClickListener {
             onItemClick(tarea)
         }
 
-        // Al tocar la X, borrar definitivamente de Room
+        // Clic en el icono 'X' para eliminar definitivamente
         holder.btnEliminar.setOnClickListener {
             onDeleteClick(tarea)
         }

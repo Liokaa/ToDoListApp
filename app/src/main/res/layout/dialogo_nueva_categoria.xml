@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nueva Categoría"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#333333"
+        android:layout_marginBottom="12dp" />
+
+    <EditText
+        android:id="@+id/etNombreCategoria"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nombre de la categoría (ej: Trabajo)" />
+
+    <EditText
+        android:id="@+id/etDescripcionCategoria"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="Descripción (opcional)" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Selecciona un color:"
+        android:textColor="#555555"
+        android:textSize="14sp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Opciones de Colores con Botones/Radios integrados -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/btnColorAzul"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_margin="4dp"
+            android:backgroundTint="#4A90E2" />
+
+        <Button
+            android:id="@+id/btnColorMorado"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_margin="4dp"
+            android:backgroundTint="#7E57C2" />
+
+        <Button
+            android:id="@+id/btnColorVerde"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_margin="4dp"
+            android:backgroundTint="#66BB6A" />
+
+        <Button
+            android:id="@+id/btnColorNaranja"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_margin="4dp"
+            android:backgroundTint="#FFA726" />
+
+        <Button
+            android:id="@+id/btnColorRojo"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_margin="4dp"
+            android:backgroundTint="#E57373" />
+    </LinearLayout>
+
+</LinearLayout>

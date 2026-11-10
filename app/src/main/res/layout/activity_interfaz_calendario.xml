@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- Header superior pastel (Igual que en la Lista Principal) -->
+        <!-- Header superior pastel -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="80dp"
@@ -60,7 +60,29 @@
             android:id="@+id/calendarView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp" />
+            android:layout_marginTop="10dp" />
+
+        <!-- Título dinámico con la fecha seleccionada -->
+        <TextView
+            android:id="@+id/tvFechaSeleccionada"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp"
+            android:text="Tareas del día"
+            android:textColor="#333333"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <!-- Lista donde se muestran las tareas filtradas por la fecha seleccionada -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTareasCalendario"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:paddingVertical="4dp"
+            tools:listitem="@layout/item_tarea" />
 
     </LinearLayout>
 

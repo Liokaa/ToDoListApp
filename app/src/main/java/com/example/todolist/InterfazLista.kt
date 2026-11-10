@@ -2,6 +2,8 @@ package com.example.todolist
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
@@ -24,6 +26,7 @@ class InterfazLista : AppCompatActivity() {
     private lateinit var rvTareas: RecyclerView
     private lateinit var adapter: TareaAdapter
     private lateinit var drawerLayout: DrawerLayout
+    private lateinit var etBuscar: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,16 +34,16 @@ class InterfazLista : AppCompatActivity() {
 
         db = AppDatabase.getDatabase(this)
 
-        // Referencias con los IDs reales de tu XML
         drawerLayout = findViewById(R.id.drawerLayout)
         val btnBurguer = findViewById<MaterialToolbar>(R.id.Burguer)
         val btnUsuario = findViewById<ImageButton>(R.id.btnUsuario)
         val navigationView = findViewById<NavigationView>(R.id.navigationView)
         val btnAgregar = findViewById<Button>(R.id.btnAgregarTarea)
+        etBuscar = findViewById(R.id.etBuscarTarea)
         rvTareas = findViewById(R.id.rvTareasMain)
 
-        // Configurar RecyclerView usando TareaAdapter
         rvTareas.layoutManager = LinearLayoutManager(this)
+
         adapter = TareaAdapter(
             listaTareas = emptyList(),
             onCheckChanged = { tarea, estaCompletada ->
@@ -48,43 +51,43 @@ class InterfazLista : AppCompatActivity() {
             },
             onDeleteClicked = { tarea ->
                 moverAPapelera(tarea)
+            },
+            onItemClicked = { tarea ->
+                mostrarDialogoTarea(tareaParaEditar = tarea)
             }
         )
         rvTareas.adapter = adapter
 
-        // Abrir Drawer al presionar el menú de barritas
+        etBuscar.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                filtrarTareas(s.toString())
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
         btnBurguer.setNavigationOnClickListener {
             drawerLayout.openDrawer(GravityCompat.START)
         }
 
-        // Abrir Perfil al presionar el icono de usuario
         btnUsuario.setOnClickListener {
             startActivity(Intent(this, InterfazUsuario::class.java))
         }
 
-        // Navegación dentro del menú lateral
         navigationView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
-                R.id.nav_calendario -> {
-                    startActivity(Intent(this, InterfazCalendario::class.java))
-                }
-                R.id.nav_papelera -> {
-                    startActivity(Intent(this, InterfazPapelera::class.java))
-                }
-                R.id.nav_usuario -> {
-                    startActivity(Intent(this, InterfazUsuario::class.java))
-                }
+                R.id.nav_calendario -> startActivity(Intent(this, InterfazCalendario::class.java))
+                R.id.nav_papelera -> startActivity(Intent(this, InterfazPapelera::class.java))
+                R.id.nav_usuario -> startActivity(Intent(this, InterfazUsuario::class.java))
             }
             drawerLayout.closeDrawer(GravityCompat.START)
             true
         }
 
-        // Botón '+' para agregar tarea
         btnAgregar.setOnClickListener {
-            mostrarDialogoNuevaTarea()
+            mostrarDialogoTarea()
         }
 
-        // Cargar tareas al iniciar
         cargarTareas()
     }
 
@@ -95,67 +98,24 @@ class InterfazLista : AppCompatActivity() {
 
     private fun cargarTareas() {
         lifecycleScope.launch {
-            // Usamos obtenerTodasActivas() de tu TareaDao
             val tareasActivas = db.tareaDao().obtenerTodasActivas()
             adapter.actualizarLista(tareasActivas)
         }
     }
 
-    private fun mostrarDialogoNuevaTarea() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Nueva Tarea")
-
-        val layout = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            setPadding(50, 20, 50, 10)
-        }
-
-        val inputTitulo = EditText(this).apply { hint = "Título de la tarea" }
-        val inputDescripcion = EditText(this).apply { hint = "Descripción" }
-        val inputFecha = EditText(this).apply { hint = "Fecha (ej. 15/11/2026)" }
-        val inputCategoria = EditText(this).apply { hint = "Categoría (ej. Escuela, Trabajo)" }
-
-        layout.addView(inputTitulo)
-        layout.addView(inputDescripcion)
-        layout.addView(inputFecha)
-        layout.addView(inputCategoria)
-
-        builder.setView(layout)
-
-        builder.setPositiveButton("Guardar") { dialog, _ ->
-            val titulo = inputTitulo.text.toString().trim()
-            val descripcion = inputDescripcion.text.toString().trim()
-            val fecha = inputFecha.text.toString().trim()
-            val categoria = inputCategoria.text.toString().trim()
-
-            if (titulo.isNotEmpty()) {
-                guardarTareaEnRoom(titulo, descripcion, fecha, categoria)
-            } else {
-                Toast.makeText(this, "El título no puede estar vacío", Toast.LENGTH_SHORT).show()
-            }
-            dialog.dismiss()
-        }
-
-        builder.setNegativeButton("Cancelar") { dialog, _ -> dialog.cancel() }
-        builder.show()
-    }
-
-    private fun guardarTareaEnRoom(titulo: String, descripcion: String, fecha: String, categoria: String) {
+    private fun filtrarTareas(query: String) {
         lifecycleScope.launch {
-            try {
-                val nuevaTarea = Tarea(
-                    id = 0,
-                    titulo = titulo,
-                    descripcion = descripcion,
-                    completada = false,
-                    enPapelera = false
-                )
-
-                db.tareaDao().insertarTarea(nuevaTarea)
-                cargarTareas()
-                Toast.makeText(this@InterfazLista, "¡Tarea guardada!", Toast.LENGTH_SHORT).show()
-            } catch (e: Exception) {
-                Toast.makeText(this@InterfazLista, "Error al guardar: ${e.message}", Toast.LENGTH_LONG).show()
+            val tareasActivas = db.tareaDao().obtenerTodasActivas()
+            if (query.isBlank()) {
+                adapter.actualizarLista(tareasActivas)
+            } else {
+                val filtradas = tareasActivas.filter {
+                    it.titulo.contains(query, ignoreCase = true) ||
+                            it.descripcion.contains(query, ignoreCase = true) ||
+                            it.categoria.contains(query, ignoreCase = true) ||
+                            it.fecha.contains(query, ignoreCase = true)
+                }
+                adapter.actualizarLista(filtradas)
             }
         }
     }
@@ -173,6 +133,95 @@ class InterfazLista : AppCompatActivity() {
             db.tareaDao().actualizarTarea(tareaEnPapelera)
             cargarTareas()
             Toast.makeText(this@InterfazLista, "Tarea enviada a la papelera", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun mostrarDialogoTarea(tareaParaEditar: Tarea? = null) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(if (tareaParaEditar == null) "Nueva Tarea" else "Editar Tarea")
+
+        val layout = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(50, 20, 50, 10)
+        }
+
+        val inputTitulo = EditText(this).apply {
+            hint = "Título de la tarea"
+            setText(tareaParaEditar?.titulo ?: "")
+        }
+        val inputDescripcion = EditText(this).apply {
+            hint = "Descripción"
+            setText(tareaParaEditar?.descripcion ?: "")
+        }
+        val inputFecha = EditText(this).apply {
+            hint = "Fecha (ej. 15/11/2026)"
+            setText(tareaParaEditar?.fecha ?: "")
+        }
+        val inputCategoria = EditText(this).apply {
+            hint = "Categoría (ej. Cat 1, Cat 2, Cat 3)"
+            setText(tareaParaEditar?.categoria ?: "Cat 1")
+        }
+
+        layout.addView(inputTitulo)
+        layout.addView(inputDescripcion)
+        layout.addView(inputFecha)
+        layout.addView(inputCategoria)
+
+        builder.setView(layout)
+
+        builder.setPositiveButton("Guardar") { dialog, _ ->
+            val titulo = inputTitulo.text.toString().trim()
+            val descripcion = inputDescripcion.text.toString().trim()
+            val fecha = inputFecha.text.toString().trim()
+            val categoria = inputCategoria.text.toString().trim()
+
+            if (titulo.isNotEmpty()) {
+                guardarTareaEnRoom(tareaParaEditar, titulo, descripcion, fecha, categoria)
+            } else {
+                Toast.makeText(this, "El título no puede estar vacío", Toast.LENGTH_SHORT).show()
+            }
+            dialog.dismiss()
+        }
+
+        builder.setNegativeButton("Cancelar") { dialog, _ -> dialog.cancel() }
+        builder.show()
+    }
+
+    private fun guardarTareaEnRoom(
+        tareaParaEditar: Tarea?,
+        titulo: String,
+        descripcion: String,
+        fecha: String,
+        categoria: String
+    ) {
+        lifecycleScope.launch {
+            try {
+                if (tareaParaEditar == null) {
+                    val nuevaTarea = Tarea(
+                        id = 0,
+                        titulo = titulo,
+                        descripcion = descripcion,
+                        fecha = fecha,
+                        categoria = if (categoria.isNotEmpty()) categoria else "Cat 1",
+                        completada = false,
+                        enPapelera = false
+                    )
+                    db.tareaDao().insertarTarea(nuevaTarea)
+                    Toast.makeText(this@InterfazLista, "¡Tarea creada!", Toast.LENGTH_SHORT).show()
+                } else {
+                    val tareaActualizada = tareaParaEditar.copy(
+                        titulo = titulo,
+                        descripcion = descripcion,
+                        fecha = fecha,
+                        categoria = if (categoria.isNotEmpty()) categoria else "Cat 1"
+                    )
+                    db.tareaDao().actualizarTarea(tareaActualizada)
+                    Toast.makeText(this@InterfazLista, "¡Tarea actualizada!", Toast.LENGTH_SHORT).show()
+                }
+                cargarTareas()
+            } catch (e: Exception) {
+                Toast.makeText(this@InterfazLista, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+            }
         }
     }
 }
