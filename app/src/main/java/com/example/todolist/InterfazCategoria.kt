@@ -1,34 +1,46 @@
 package com.example.todolist
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class InterfazCategoria : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_interfaz_categoria)
 
-        val btnLista = findViewById<Button>(R.id.btnLista)
-        val btnCalendario = findViewById<Button>(R.id.btnCalendario)
-        val btnPapelera = findViewById<Button>(R.id.btnPapelera)
-        val btnUsuario = findViewById<Button>(R.id.btnUsuario)
+        val tvMenu = findViewById<TextView>(R.id.tvMenu)
+        val tvUser = findViewById<TextView>(R.id.tvUser)
+        val btnCat1 = findViewById<Button>(R.id.btnCat1)
+        val btnCat2 = findViewById<Button>(R.id.btnCat2)
+        val btnCat3 = findViewById<Button>(R.id.btnCat3)
+        val fabAdd = findViewById<FloatingActionButton>(R.id.fabAdd)
 
-        btnLista.setOnClickListener {
-            startActivity(Intent(this, InterfazLista::class.java))
+        tvMenu?.setOnClickListener {
+            finish()
         }
 
-        btnCalendario.setOnClickListener {
-            startActivity(Intent(this, InterfazCalendario::class.java))
+        tvUser?.setOnClickListener {
+            Toast.makeText(this, "Perfil de usuario", Toast.LENGTH_SHORT).show()
         }
 
-        btnPapelera.setOnClickListener {
-            startActivity(Intent(this, InterfazPapelera::class.java))
+        btnCat1?.setOnClickListener {
+            Toast.makeText(this, "Categoría 1 seleccionada", Toast.LENGTH_SHORT).show()
         }
 
-        btnUsuario.setOnClickListener {
-            startActivity(Intent(this, InterfazUsuario::class.java))
+        btnCat2?.setOnClickListener {
+            Toast.makeText(this, "Categoría 2 seleccionada", Toast.LENGTH_SHORT).show()
+        }
+
+        btnCat3?.setOnClickListener {
+            Toast.makeText(this, "Categoría 3 seleccionada", Toast.LENGTH_SHORT).show()
+        }
+
+        fabAdd?.setOnClickListener {
+            Toast.makeText(this, "Agregar nueva categoría", Toast.LENGTH_SHORT).show()
         }
     }
 }

@@ -7,59 +7,57 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class InterfazRegistro : AppCompatActivity() {
+
+    private lateinit var db: AppDatabase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_interfaz_registro)
 
-        val etName = findViewById<EditText>(R.id.etName)
-        val etEmail = findViewById<EditText>(R.id.etEmail)
-        val etPassword = findViewById<EditText>(R.id.etPassword)
-        val btnCreateAccount = findViewById<Button>(R.id.btnCreateAccount)
-        val btnCancel = findViewById<Button>(R.id.btnCancel)
+        db = AppDatabase.getDatabase(this)
 
-        val db = AppDatabase.getDatabase(this)
+        val etNombre = findViewById<EditText>(R.id.reNombre)
+        val etCorreo = findViewById<EditText>(R.id.reCorreo)
+        val etContrasena = findViewById<EditText>(R.id.reContrasena)
+        val btnRegistrar = findViewById<Button>(R.id.btnCreateAccount)
+        val btnCancelar = findViewById<Button>(R.id.btnCancel)
 
-        btnCreateAccount.setOnClickListener {
-            val usuarioText = etName.text.toString().trim()
-            val correoText = etEmail.text.toString().trim()
-            val passText = etPassword.text.toString().trim()
+        btnRegistrar.setOnClickListener {
+            val nombreInput = etNombre.text.toString().trim()
+            val correoInput = etCorreo.text.toString().trim()
+            val contrasenaInput = etContrasena.text.toString().trim()
 
-            if (usuarioText.isEmpty() || correoText.isEmpty() || passText.isEmpty()) {
+            if (nombreInput.isEmpty() || correoInput.isEmpty() || contrasenaInput.isEmpty()) {
                 Toast.makeText(this, "Por favor completa todos los campos", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            lifecycleScope.launch(Dispatchers.IO) {
-                val existente = db.usuarioDao().existeUsuario(usuarioText, correoText)
-                if (existente != null) {
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(this@InterfazRegistro, "El usuario o correo ya está registrado", Toast.LENGTH_SHORT).show()
-                    }
-                } else {
+            lifecycleScope.launch {
+                try {
+                    // Usamos las variables id, usuario, correo y contrasena tal como están en Usuario.kt
                     val nuevoUsuario = Usuario(
-                        usuario = usuarioText,
-                        correo = correoText,
-                        contrasena = passText
+                        id = 0,
+                        usuario = nombreInput,
+                        correo = correoInput,
+                        contrasena = contrasenaInput
                     )
+
                     db.usuarioDao().registrarUsuario(nuevoUsuario)
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(this@InterfazRegistro, "¡Usuario registrado con éxito!", Toast.LENGTH_SHORT).show()
-                        val intent = Intent(this@InterfazRegistro, InterfazLogin::class.java)
-                        startActivity(intent)
-                        finish()
-                    }
+                    Toast.makeText(this@InterfazRegistro, "¡Registro exitoso!", Toast.LENGTH_SHORT).show()
+
+                    val intent = Intent(this@InterfazRegistro, InterfazLogin::class.java)
+                    startActivity(intent)
+                    finish()
+                } catch (e: Exception) {
+                    Toast.makeText(this@InterfazRegistro, "Error al registrar: ${e.message}", Toast.LENGTH_LONG).show()
                 }
             }
         }
 
-        btnCancel.setOnClickListener {
-            val intent = Intent(this, InterfazLogin::class.java)
-            startActivity(intent)
+        btnCancelar.setOnClickListener {
             finish()
         }
     }
