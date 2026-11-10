@@ -1,45 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:padding="16dp">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tvTitle"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="horizontal"
+        android:gravity="bottom"
+        android:background="#FDB5E7">
+
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="0.5"
+            app:srcCompat="@android:drawable/ic_menu_delete" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Papelera"
+            android:textStyle="bold"
+            android:textSize="32sp"
+            android:layout_marginBottom="1dp"/>
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="0.5"
+            app:srcCompat="@android:drawable/ic_menu_report_image" />
+
+    </LinearLayout>
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Papelera de Reciclaje"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="24dp" />
+        android:orientation="horizontal"
+        android:padding="12dp">
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Buscar:"
+            android:textSize="32sp"/>
+        <LinearLayout
+            android:layout_marginLeft="40dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/reunded_linearlayout"
+            >
+            <EditText
+                android:id="@+id/etBuscar"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:inputType="text"
+                android:selectAllOnFocus="false"
+                android:singleLine="false"
+                android:textSize="22sp"
+                android:backgroundTint="@android:color/transparent"
+                android:hint="Buscar"/>
 
-    <Button
-        android:id="@+id/btnLista"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Lista de Tareas"
-        android:layout_marginBottom="8dp" />
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:srcCompat="@android:drawable/ic_menu_search"/>
+        </LinearLayout>
+    </LinearLayout>
 
-    <Button
-        android:id="@+id/btnCalendario"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvPapelera"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Calendario"
-        android:layout_marginBottom="8dp" />
-
-    <Button
-        android:id="@+id/btnCategoria"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Categorías"
-        android:layout_marginBottom="8dp" />
-
-    <Button
-        android:id="@+id/btnUsuario"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Perfil de Usuario" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="16dp"
+        android:clipToPadding="false"
+        tools:listitem="@layout/item_papelera"/>
 
 </LinearLayout>

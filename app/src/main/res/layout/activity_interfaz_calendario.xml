@@ -1,45 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
-    android:padding="16dp">
+    android:gravity="">
 
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Calendario"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="24dp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="horizontal"
+        android:gravity="bottom"
+        android:background="#A2DEFF">
 
-    <Button
-        android:id="@+id/btnLista"
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="60dp"
+
+            app:srcCompat="@android:drawable/ic_menu_my_calendar" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Calendario"
+            android:textStyle="bold"
+            android:textSize="32sp"
+            android:layout_marginBottom="1dp"/>
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="60dp"
+            app:srcCompat="@android:drawable/ic_menu_report_image"
+            />
+
+    </LinearLayout>
+
+    <CalendarView
+        android:id="@+id/calendarView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Lista de Tareas"
-        android:layout_marginBottom="8dp" />
-
-    <Button
-        android:id="@+id/btnCategoria"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Categorías"
-        android:layout_marginBottom="8dp" />
-
-    <Button
-        android:id="@+id/btnPapelera"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Papelera de Reciclaje"
-        android:layout_marginBottom="8dp" />
-
-    <Button
-        android:id="@+id/btnUsuario"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Perfil de Usuario" />
+        android:layout_marginTop="50dp"
+        android:focusedMonthDateColor="#FFFFFF"
+        android:outlineSpotShadowColor="#C53838" />
 
 </LinearLayout>
