@@ -12,6 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ToDoList">
 
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
         <activity
             android:name=".InterfazCarga"
             android:exported="true">

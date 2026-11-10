@@ -4,14 +4,50 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="16dp">
+    android:background="@color/white"
+    android:padding="32dp">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <ImageView
+        android:id="@+id/imgLogo"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:contentDescription="Logo de la app"
+        android:src="@drawable/ic_logo_gatito" />
 
     <TextView
-        android:id="@+id/tvLogoTitle"
+        android:id="@+id/tvNombreApp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="To Do List"
         android:textSize="28sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textColor="#617BE1"
+        android:layout_marginTop="16dp" />
+
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:indeterminateTint="#617BE1" />
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DSM 4-C (2026)"
+        android:textSize="14sp"
+        android:textColor="#617BE1" />
 
 </LinearLayout>
