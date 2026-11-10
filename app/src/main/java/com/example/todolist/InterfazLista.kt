@@ -1,13 +1,17 @@
 package com.example.todolist
 
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.Spinner
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.launch
+import java.util.Calendar
 
 class InterfazLista : AppCompatActivity() {
 
@@ -150,34 +155,87 @@ class InterfazLista : AppCompatActivity() {
             hint = "Título de la tarea"
             setText(tareaParaEditar?.titulo ?: "")
         }
+
         val inputDescripcion = EditText(this).apply {
             hint = "Descripción"
             setText(tareaParaEditar?.descripcion ?: "")
         }
-        val inputFecha = EditText(this).apply {
-            hint = "Fecha (ej. 15/11/2026)"
-            setText(tareaParaEditar?.fecha ?: "")
+
+        // 1. Selector de fecha con DatePickerDialog (Pop-up de Calendario)
+        var fechaSeleccionada = tareaParaEditar?.fecha ?: ""
+        val btnFecha = Button(this).apply {
+            text = if (fechaSeleccionada.isEmpty()) "Seleccionar fecha 📅" else "Fecha: $fechaSeleccionada"
         }
-        val inputCategoria = EditText(this).apply {
-            hint = "Categoría (ej. Cat 1, Cat 2, Cat 3)"
-            setText(tareaParaEditar?.categoria ?: "Cat 1")
+
+        btnFecha.setOnClickListener {
+            val cal = Calendar.getInstance()
+            val datePicker = DatePickerDialog(
+                this,
+                { _, year, month, dayOfMonth ->
+                    fechaSeleccionada = String.format("%02d/%02d/%d", dayOfMonth, month + 1, year)
+                    btnFecha.text = "Fecha: $fechaSeleccionada"
+                },
+                cal.get(Calendar.YEAR),
+                cal.get(Calendar.MONTH),
+                cal.get(Calendar.DAY_OF_MONTH)
+            )
+            datePicker.show()
         }
+
+        // 2. Desplegable Spinner para seleccionar Categoría
+        val tvCategoriaLabel = TextView(this).apply {
+            text = "Categoría:"
+            textSize = 14f
+            setPadding(0, 16, 0, 4)
+        }
+        val spinnerCategoria = Spinner(this)
 
         layout.addView(inputTitulo)
         layout.addView(inputDescripcion)
-        layout.addView(inputFecha)
-        layout.addView(inputCategoria)
+        layout.addView(btnFecha)
+        layout.addView(tvCategoriaLabel)
+        layout.addView(spinnerCategoria)
+
+        // Cargar las categorías guardadas en la base de datos
+        lifecycleScope.launch {
+            val categoriasGuardadas = db.categoriaDao().obtenerTodas()
+            val nombresCategorias = if (categoriasGuardadas.isEmpty()) {
+                listOf("General")
+            } else {
+                categoriasGuardadas.map { it.nombre }
+            }
+
+            val adapterSpinner = ArrayAdapter(
+                this@InterfazLista,
+                android.R.layout.simple_spinner_dropdown_item,
+                nombresCategorias
+            )
+            spinnerCategoria.adapter = adapterSpinner
+
+            // Si se está editando una tarea, seleccionar la categoría previa en el Spinner
+            tareaParaEditar?.let { tarea ->
+                val index = nombresCategorias.indexOf(tarea.categoria)
+                if (index >= 0) {
+                    spinnerCategoria.setSelection(index)
+                }
+            }
+        }
 
         builder.setView(layout)
 
         builder.setPositiveButton("Guardar") { dialog, _ ->
             val titulo = inputTitulo.text.toString().trim()
             val descripcion = inputDescripcion.text.toString().trim()
-            val fecha = inputFecha.text.toString().trim()
-            val categoria = inputCategoria.text.toString().trim()
+            val categoriaElegida = spinnerCategoria.selectedItem?.toString() ?: "General"
+
+            // Si el usuario no eligió fecha, asignar por defecto la fecha de HOY
+            if (fechaSeleccionada.isEmpty()) {
+                val cal = Calendar.getInstance()
+                fechaSeleccionada = String.format("%02d/%02d/%d", cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.YEAR))
+            }
 
             if (titulo.isNotEmpty()) {
-                guardarTareaEnRoom(tareaParaEditar, titulo, descripcion, fecha, categoria)
+                guardarTareaEnRoom(tareaParaEditar, titulo, descripcion, fechaSeleccionada, categoriaElegida)
             } else {
                 Toast.makeText(this, "El título no puede estar vacío", Toast.LENGTH_SHORT).show()
             }
@@ -203,7 +261,7 @@ class InterfazLista : AppCompatActivity() {
                         titulo = titulo,
                         descripcion = descripcion,
                         fecha = fecha,
-                        categoria = if (categoria.isNotEmpty()) categoria else "Cat 1",
+                        categoria = categoria,
                         completada = false,
                         enPapelera = false
                     )
@@ -214,7 +272,7 @@ class InterfazLista : AppCompatActivity() {
                         titulo = titulo,
                         descripcion = descripcion,
                         fecha = fecha,
-                        categoria = if (categoria.isNotEmpty()) categoria else "Cat 1"
+                        categoria = categoria
                     )
                     db.tareaDao().actualizarTarea(tareaActualizada)
                     Toast.makeText(this@InterfazLista, "¡Tarea actualizada!", Toast.LENGTH_SHORT).show()
