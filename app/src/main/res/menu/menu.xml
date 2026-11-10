@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_lista"
+        android:title="Lista de Tareas" />
+    <item
+        android:id="@+id/nav_calendario"
+        android:title="Calendario" />
+    <item
+        android:id="@+id/nav_categoria"
+        android:title="Categorías" />
+    <item
+        android:id="@+id/nav_papelera"
+        android:title="Papelera" />
+    <item
+        android:id="@+id/nav_usuario"
+        android:title="Perfil de Usuario" />
+</menu>
