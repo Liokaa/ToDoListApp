@@ -2,7 +2,7 @@ package com.example.todolist
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.TextView
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 
 class InterfazCategoria : AppCompatActivity() {
@@ -10,14 +10,24 @@ class InterfazCategoria : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_interfaz_categoria)
 
-        val tvMenu = findViewById<TextView>(R.id.tvMenu)
-        val tvUser = findViewById<TextView>(R.id.tvUser)
+        val btnLista = findViewById<Button>(R.id.btnLista)
+        val btnCalendario = findViewById<Button>(R.id.btnCalendario)
+        val btnPapelera = findViewById<Button>(R.id.btnPapelera)
+        val btnUsuario = findViewById<Button>(R.id.btnUsuario)
 
-        tvMenu.setOnClickListener {
+        btnLista.setOnClickListener {
             startActivity(Intent(this, InterfazLista::class.java))
         }
 
-        tvUser.setOnClickListener {
+        btnCalendario.setOnClickListener {
+            startActivity(Intent(this, InterfazCalendario::class.java))
+        }
+
+        btnPapelera.setOnClickListener {
+            startActivity(Intent(this, InterfazPapelera::class.java))
+        }
+
+        btnUsuario.setOnClickListener {
             startActivity(Intent(this, InterfazUsuario::class.java))
         }
     }

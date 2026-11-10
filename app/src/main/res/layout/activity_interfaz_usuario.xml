@@ -1,183 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:background="#F2EDDE">
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="16dp">
 
     <TextView
-        android:id="@+id/tvMenu"
+        android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="☰"
+        android:text="Perfil de Usuario"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:textColor="#333333"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tvClose"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="✕"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="#333333"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <!-- Rectángulo de color cian atrás de tvMenu y tvClose en la barra superior -->
-
-    <!-- Avatar de perfil con icono de lápiz -->
-
-    <View
-        android:id="@+id/headerBackground"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="-16dp"
-        android:layout_marginTop="-12dp"
-        android:layout_marginEnd="-16dp"
-        android:layout_marginBottom="-12dp"
-        android:background="#B2EBF2"
-        app:layout_constraintBottom_toBottomOf="@+id/tvMenu"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvMenu"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <FrameLayout
-        android:id="@+id/profileContainer"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:layout_marginTop="24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvMenu">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="👤"
-            android:textSize="45sp" />
-    </FrameLayout>
-
-    <!-- Campo Nombre -->
-    <TextView
-        android:id="@+id/lblNombre"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Nombre"
-        android:textColor="#333333"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileContainer" />
-
-    <EditText
-        android:id="@+id/etNombre"
-        android:layout_width="0dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="4dp"
-        android:background="#B2EBF2"
-        android:paddingStart="12dp"
-        android:textColor="#333333"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblNombre" />
-
-    <!-- Campo Correo -->
-    <TextView
-        android:id="@+id/lblCorreo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Correo"
-        android:textColor="#333333"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etNombre" />
-
-    <EditText
-        android:id="@+id/etCorreo"
-        android:layout_width="0dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="4dp"
-        android:background="#B2EBF2"
-        android:paddingStart="12dp"
-        android:textColor="#333333"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblCorreo" />
-
-    <!-- Campo Contraseña -->
-    <TextView
-        android:id="@+id/lblContrasena"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Contraseña"
-        android:textColor="#333333"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etCorreo" />
-
-    <EditText
-        android:id="@+id/etContrasena"
-        android:layout_width="0dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="4dp"
-        android:background="#B2EBF2"
-        android:inputType="textPassword"
-        android:paddingStart="12dp"
-        android:textColor="#333333"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblContrasena" />
-
-    <!-- Botón Cambiar -->
-    <TextView
-        android:id="@+id/lblCambiar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Cambiar"
-        android:textColor="#333333"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etContrasena" />
+        android:layout_marginBottom="24dp" />
 
     <Button
-        android:id="@+id/btnCambiar"
-        android:layout_width="0dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="4dp"
-        android:backgroundTint="#00BCD4"
-        android:text="Guardar Cambios"
-        android:textColor="#FFFFFF"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblCambiar" />
+        android:id="@+id/btnLista"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lista de Tareas"
+        android:layout_marginBottom="8dp" />
 
-    <!-- Barra inferior con Cerrar sesión -->
+    <Button
+        android:id="@+id/btnCalendario"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Calendario"
+        android:layout_marginBottom="8dp" />
+
+    <Button
+        android:id="@+id/btnCategoria"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Categorías"
+        android:layout_marginBottom="8dp" />
+
     <Button
         android:id="@+id/btnLogout"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="#F48FB1"
-        android:text="Cerrar sesión ⇥"
-        android:textColor="#333333"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:text="Cerrar Sesión" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
