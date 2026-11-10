@@ -3,6 +3,7 @@ package com.example.todolist
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
 class InterfazUsuario : AppCompatActivity() {
@@ -10,21 +11,21 @@ class InterfazUsuario : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_interfaz_usuario)
 
-        val btnLista = findViewById<Button>(R.id.btnLista)
-        val btnCalendario = findViewById<Button>(R.id.btnCalendario)
-        val btnCategoria = findViewById<Button>(R.id.btnCategoria)
+        val tvMenu = findViewById<TextView>(R.id.tvMenu)
+        val tvClose = findViewById<TextView>(R.id.tvClose)
+        val btnCambiar = findViewById<Button>(R.id.btnCambiar)
         val btnLogout = findViewById<Button>(R.id.btnLogout)
 
-        btnLista.setOnClickListener {
+        tvMenu.setOnClickListener {
             startActivity(Intent(this, InterfazLista::class.java))
         }
 
-        btnCalendario.setOnClickListener {
-            startActivity(Intent(this, InterfazCalendario::class.java))
+        tvClose.setOnClickListener {
+            finish()
         }
 
-        btnCategoria.setOnClickListener {
-            startActivity(Intent(this, InterfazCategoria::class.java))
+        btnCambiar.setOnClickListener {
+            // Acción de guardar cambios / cambiar perfil
         }
 
         btnLogout.setOnClickListener {
