@@ -68,7 +68,7 @@ class TareaAdapter(
         holder.tvDescripcion.text = tarea.descripcion
         holder.tvFecha.text = if (tarea.fecha.isNotBlank()) "📅 ${tarea.fecha}" else "📅 Sin fecha"
 
-        // 3. Cargar Categoría y su Color Pastel dinámico desde Room
+        // 3. Cargar Categoría y su Color Pastel dinámico desde Room asociándolo al usuarioId de la tarea
         val catNombre = if (tarea.categoria.isNotBlank()) tarea.categoria else "General"
         holder.tvCategoria.text = catNombre.uppercase()
 
@@ -81,7 +81,8 @@ class TareaAdapter(
         } else {
             activity?.lifecycleScope?.launch(Dispatchers.IO) {
                 val db = AppDatabase.getDatabase(context)
-                val listaCategorias = db.categoriaDao().obtenerTodas()
+                // Usamos la nueva función del DAO filtrando por el usuarioId de la tarea
+                val listaCategorias = db.categoriaDao().obtenerTodasDeUsuario(tarea.usuarioId)
                 val match = listaCategorias.find { it.nombre.equals(catNombre, ignoreCase = true) }
 
                 val colorHex = match?.colorHex ?: "#C3B1E1"

@@ -6,7 +6,8 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "tabla_categorias")
 data class Categoria(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    val usuarioId: Int, // 👈 Clave para aislar las categorías por usuario
     val nombre: String,
     val descripcion: String = "",
-    val colorHex: String = "#4A90E2" // Guardará el color en formato Hexadecimal (ej: #4A90E2)
+    val colorHex: String = "#4A90E2"
 )

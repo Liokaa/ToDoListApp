@@ -15,12 +15,12 @@ class CategoriaAdapter(
     private val onDeleteClick: (Categoria) -> Unit
 ) : RecyclerView.Adapter<CategoriaAdapter.CategoriaViewHolder>() {
 
-    class CategoriaViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val viewColorBarra: View = view.findViewById(R.id.viewColorBarra)
-        val tvNombre: TextView = view.findViewById(R.id.tvNombre)
-        val tvDescripcion: TextView = view.findViewById(R.id.tvDescripcion)
-        val btnEditar: ImageButton = view.findViewById(R.id.btnEditar)
-        val btnEliminar: ImageButton = view.findViewById(R.id.btnEliminar)
+    inner class CategoriaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val tvNombre: TextView = itemView.findViewById(R.id.tvNombre)
+        val tvDescripcion: TextView = itemView.findViewById(R.id.tvDescripcion)
+        val viewColorBarra: View = itemView.findViewById(R.id.viewColorBarra)
+        val btnEditar: ImageButton = itemView.findViewById(R.id.btnEditar)
+        val btnEliminar: ImageButton = itemView.findViewById(R.id.btnEliminar)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoriaViewHolder {
@@ -29,31 +29,22 @@ class CategoriaAdapter(
     }
 
     override fun onBindViewHolder(holder: CategoriaViewHolder, position: Int) {
-        val cat = listaCategorias[position]
-        holder.tvNombre.text = cat.nombre
-        holder.tvDescripcion.text = cat.descripcion
+        val categoria = listaCategorias[position]
 
-        // Pintar la barra de color pastel
+        holder.tvNombre.text = categoria.nombre
+        holder.tvDescripcion.text = categoria.descripcion
+
+        // Asignar el color Hexadecimal a la barra lateral del item
         try {
-            holder.viewColorBarra.setBackgroundColor(Color.parseColor(cat.colorHex))
+            holder.viewColorBarra.setBackgroundColor(Color.parseColor(categoria.colorHex))
         } catch (e: Exception) {
             holder.viewColorBarra.setBackgroundColor(Color.parseColor("#C3B1E1"))
         }
 
-        // Clic en la tarjeta: Ver las tareas asociadas
-        holder.itemView.setOnClickListener {
-            onItemClick(cat)
-        }
-
-        // Clic en el botón Editar
-        holder.btnEditar.setOnClickListener {
-            onEditClick(cat)
-        }
-
-        // Clic en el botón Eliminar
-        holder.btnEliminar.setOnClickListener {
-            onDeleteClick(cat)
-        }
+        // Eventos de clic
+        holder.itemView.setOnClickListener { onItemClick(categoria) }
+        holder.btnEditar.setOnClickListener { onEditClick(categoria) }
+        holder.btnEliminar.setOnClickListener { onDeleteClick(categoria) }
     }
 
     override fun getItemCount(): Int = listaCategorias.size

@@ -9,7 +9,7 @@ import androidx.room.Query
 interface UsuarioDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun registrarUsuario(usuario: Usuario)
+    suspend fun registrarUsuario(usuario: Usuario): Long
 
     @Query("SELECT * FROM tabla_usuarios WHERE (usuario = :userOrEmail OR correo = :userOrEmail) AND contrasena = :pass LIMIT 1")
     suspend fun login(userOrEmail: String, pass: String): Usuario?

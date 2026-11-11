@@ -1,6 +1,7 @@
 package com.example.todolist
 
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -33,11 +34,17 @@ class InterfazLista : AppCompatActivity() {
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var etBuscar: EditText
 
+    private var idUsuarioLogueado: Int = -1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_interfaz_lista)
 
         db = AppDatabase.getDatabase(this)
+
+        // 1. Obtener ID del usuario con sesión activa
+        val prefs = getSharedPreferences("MiSesionApp", Context.MODE_PRIVATE)
+        idUsuarioLogueado = prefs.getInt("ID_USUARIO_LOGUEADO", -1)
 
         drawerLayout = findViewById(R.id.drawerLayout)
         val btnBurguer = findViewById<MaterialToolbar>(R.id.Burguer)
@@ -104,25 +111,29 @@ class InterfazLista : AppCompatActivity() {
 
     private fun cargarTareas() {
         lifecycleScope.launch {
-            val tareasActivas = db.tareaDao().obtenerTodasActivas()
-            adapter.actualizarLista(tareasActivas)
+            if (idUsuarioLogueado != -1) {
+                val tareasActivas = db.tareaDao().obtenerTodasActivasDeUsuario(idUsuarioLogueado)
+                adapter.actualizarLista(tareasActivas)
+            }
         }
     }
 
     private fun filtrarTareas(query: String) {
         lifecycleScope.launch {
-            val tareasActivas = db.tareaDao().obtenerTodasActivas()
-            if (query.isBlank()) {
-                adapter.actualizarLista(tareasActivas)
-            } else {
-                val filtradas = tareasActivas.filter {
-                    it.titulo.contains(query, ignoreCase = true) ||
-                            it.descripcion.contains(query, ignoreCase = true) ||
-                            it.categoria.contains(query, ignoreCase = true) ||
-                            it.estado.contains(query, ignoreCase = true) ||
-                            it.fecha.contains(query, ignoreCase = true)
+            if (idUsuarioLogueado != -1) {
+                val tareasActivas = db.tareaDao().obtenerTodasActivasDeUsuario(idUsuarioLogueado)
+                if (query.isBlank()) {
+                    adapter.actualizarLista(tareasActivas)
+                } else {
+                    val filtradas = tareasActivas.filter {
+                        it.titulo.contains(query, ignoreCase = true) ||
+                                it.descripcion.contains(query, ignoreCase = true) ||
+                                it.categoria.contains(query, ignoreCase = true) ||
+                                it.estado.contains(query, ignoreCase = true) ||
+                                it.fecha.contains(query, ignoreCase = true)
+                    }
+                    adapter.actualizarLista(filtradas)
                 }
-                adapter.actualizarLista(filtradas)
             }
         }
     }
@@ -162,7 +173,7 @@ class InterfazLista : AppCompatActivity() {
             setText(tareaParaEditar?.descripcion ?: "")
         }
 
-        // 1. Selector de fecha con DatePickerDialog
+        // Selector de fecha
         var fechaSeleccionada = tareaParaEditar?.fecha ?: ""
         val btnFecha = Button(this).apply {
             text = if (fechaSeleccionada.isEmpty()) "Seleccionar fecha 📅" else "Fecha: $fechaSeleccionada"
@@ -183,7 +194,7 @@ class InterfazLista : AppCompatActivity() {
             datePicker.show()
         }
 
-        // 2. Selector de Categoría dinámica desde Room
+        // Selector de Categoría
         val tvCategoriaLabel = TextView(this).apply {
             text = "Categoría:"
             textSize = 14f
@@ -191,7 +202,7 @@ class InterfazLista : AppCompatActivity() {
         }
         val spinnerCategoria = Spinner(this)
 
-        // 3. Selector de Estado (PENDIENTE, EN_PROGRESO, COMPLETADA)
+        // Selector de Estado
         val tvEstadoLabel = TextView(this).apply {
             text = "Estado inicial:"
             textSize = 14f
@@ -215,9 +226,9 @@ class InterfazLista : AppCompatActivity() {
         layout.addView(tvEstadoLabel)
         layout.addView(spinnerEstado)
 
-        // Cargar categorías guardadas en la base de datos
+        // Cargar únicamente las categorías del usuario logueado
         lifecycleScope.launch {
-            val categoriasGuardadas = db.categoriaDao().obtenerTodas()
+            val categoriasGuardadas = db.categoriaDao().obtenerTodasDeUsuario(idUsuarioLogueado)
             val nombresCategorias = if (categoriasGuardadas.isEmpty()) {
                 listOf("General")
             } else {
@@ -286,6 +297,7 @@ class InterfazLista : AppCompatActivity() {
                 if (tareaParaEditar == null) {
                     val nuevaTarea = Tarea(
                         id = 0,
+                        usuarioId = idUsuarioLogueado, // 👈 Se inyecta el ID del usuario logueado
                         titulo = titulo,
                         descripcion = descripcion,
                         fecha = fecha,

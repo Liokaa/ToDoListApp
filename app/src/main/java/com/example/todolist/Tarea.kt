@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "tabla_tareas")
 data class Tarea(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    val usuarioId: Int, // 👈 Clave para aislar la tarea por usuario
     val titulo: String,
     val descripcion: String,
     val fecha: String,

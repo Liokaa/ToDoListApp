@@ -1,5 +1,6 @@
 package com.example.todolist
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -37,7 +38,6 @@ class InterfazRegistro : AppCompatActivity() {
 
             lifecycleScope.launch {
                 try {
-                    // Usamos las variables id, usuario, correo y contrasena tal como están en Usuario.kt
                     val nuevoUsuario = Usuario(
                         id = 0,
                         usuario = nombreInput,
@@ -45,10 +45,19 @@ class InterfazRegistro : AppCompatActivity() {
                         contrasena = contrasenaInput
                     )
 
-                    db.usuarioDao().registrarUsuario(nuevoUsuario)
-                    Toast.makeText(this@InterfazRegistro, "¡Registro exitoso!", Toast.LENGTH_SHORT).show()
+                    // 1. Insertar el usuario y obtener su nuevo ID directo de Room
+                    val idGenerado = db.usuarioDao().registrarUsuario(nuevoUsuario).toInt()
 
-                    val intent = Intent(this@InterfazRegistro, InterfazLogin::class.java)
+                    // 2. Guardar la sesión automáticamente
+                    val prefs = getSharedPreferences("MiSesionApp", Context.MODE_PRIVATE)
+                    prefs.edit().putInt("ID_USUARIO_LOGUEADO", idGenerado).apply()
+
+                    Toast.makeText(this@InterfazRegistro, "¡Cuenta creada con éxito!", Toast.LENGTH_SHORT).show()
+
+                    // 3. Entrar directo a la lista principal
+                    val intent = Intent(this@InterfazRegistro, InterfazLista::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    }
                     startActivity(intent)
                     finish()
                 } catch (e: Exception) {

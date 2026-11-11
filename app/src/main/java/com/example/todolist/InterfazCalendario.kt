@@ -1,5 +1,6 @@
 package com.example.todolist
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.CalendarView
@@ -27,12 +28,17 @@ class InterfazCalendario : AppCompatActivity() {
     private lateinit var drawerLayout: DrawerLayout
 
     private var fechaFiltroActual: String = ""
+    private var idUsuarioLogueado: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_interfaz_calendario)
 
         db = AppDatabase.getDatabase(this)
+
+        // 1. Obtener ID del usuario actualmente logueado
+        val prefs = getSharedPreferences("MiSesionApp", Context.MODE_PRIVATE)
+        idUsuarioLogueado = prefs.getInt("ID_USUARIO_LOGUEADO", -1)
 
         drawerLayout = findViewById(R.id.drawerLayout)
         val btnBurguer = findViewById<MaterialToolbar>(R.id.Burguer)
@@ -109,10 +115,11 @@ class InterfazCalendario : AppCompatActivity() {
 
     private fun cargarTareasPorFecha(fechaStr: String) {
         lifecycleScope.launch {
-            val tareasActivas = db.tareaDao().obtenerTodasActivas()
-            // Filtra las tareas que coincidan exactamente con la fecha seleccionada
-            val tareasFiltradas = tareasActivas.filter { it.fecha == fechaStr }
-            adapter.actualizarLista(tareasFiltradas)
+            if (idUsuarioLogueado != -1) {
+                // Consultar tareas de esa fecha asociadas ÚNICAMENTE al usuario logueado
+                val tareasFiltradas = db.tareaDao().obtenerPorFecha(idUsuarioLogueado, fechaStr)
+                adapter.actualizarLista(tareasFiltradas)
+            }
         }
     }
 }

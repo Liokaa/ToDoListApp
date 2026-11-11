@@ -14,13 +14,15 @@ interface CategoriaDao {
     @Delete
     suspend fun eliminar(categoria: Categoria)
 
-    @Query("SELECT * FROM tabla_categorias ORDER BY id ASC")
-    suspend fun obtenerTodas(): List<Categoria>
+    // Consulta todas las categorías pertenecientes ÚNICAMENTE al usuario logueado
+    @Query("SELECT * FROM tabla_categorias WHERE usuarioId = :userId ORDER BY id ASC")
+    suspend fun obtenerTodasDeUsuario(userId: Int): List<Categoria>
 
-    @Query("SELECT * FROM tabla_categorias WHERE nombre LIKE '%' || :query || '%'")
-    suspend fun buscarCategorias(query: String): List<Categoria>
+    // Busca categorías asociadas ÚNICAMENTE al usuario logueado
+    @Query("SELECT * FROM tabla_categorias WHERE usuarioId = :userId AND nombre LIKE '%' || :query || '%'")
+    suspend fun buscarCategorias(userId: Int, query: String): List<Categoria>
 
-    // Consulta corregida con la tabla "tabla_tareas" y el campo "titulo"
-    @Query("SELECT * FROM tabla_tareas WHERE categoria = :nombreCategoria AND enPapelera = 0")
-    suspend fun obtenerTareasPorCategoria(nombreCategoria: String): List<Tarea>
+    // Consulta las tareas asociadas a esa categoría y pertenecientes al usuario logueado
+    @Query("SELECT * FROM tabla_tareas WHERE usuarioId = :userId AND categoria = :nombreCategoria AND enPapelera = 0")
+    suspend fun obtenerTareasPorCategoria(userId: Int, nombreCategoria: String): List<Tarea>
 }

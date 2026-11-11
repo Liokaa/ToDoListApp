@@ -9,21 +9,21 @@ import androidx.room.Update
 @Dao
 interface TareaDao {
 
-    // Obtener tareas activas para la pantalla principal y categorías
-    @Query("SELECT * FROM tabla_tareas WHERE enPapelera = 0 ORDER BY id DESC")
-    suspend fun obtenerTodasActivas(): List<Tarea>
+    // Obtener tareas activas del usuario logueado para la pantalla principal
+    @Query("SELECT * FROM tabla_tareas WHERE usuarioId = :userId AND enPapelera = 0 ORDER BY id DESC")
+    suspend fun obtenerTodasActivasDeUsuario(userId: Int): List<Tarea>
 
-    // Obtener tareas enviadas a la papelera
-    @Query("SELECT * FROM tabla_tareas WHERE enPapelera = 1 ORDER BY id DESC")
-    suspend fun obtenerPapelera(): List<Tarea>
+    // Obtener tareas en la papelera del usuario logueado
+    @Query("SELECT * FROM tabla_tareas WHERE usuarioId = :userId AND enPapelera = 1 ORDER BY id DESC")
+    suspend fun obtenerPapeleraDeUsuario(userId: Int): List<Tarea>
 
-    // Obtener tareas por categoría activa
-    @Query("SELECT * FROM tabla_tareas WHERE categoria = :cat AND enPapelera = 0 ORDER BY id DESC")
-    suspend fun obtenerPorCategoria(cat: String): List<Tarea>
+    // Obtener tareas por categoría del usuario logueado
+    @Query("SELECT * FROM tabla_tareas WHERE usuarioId = :userId AND categoria = :cat AND enPapelera = 0 ORDER BY id DESC")
+    suspend fun obtenerPorCategoria(userId: Int, cat: String): List<Tarea>
 
-    // Obtener tareas por fecha activa (para el Calendario)
-    @Query("SELECT * FROM tabla_tareas WHERE fecha = :fechaTxt AND enPapelera = 0 ORDER BY id DESC")
-    suspend fun obtenerPorFecha(fechaTxt: String): List<Tarea>
+    // Obtener tareas por fecha del usuario logueado (para el Calendario)
+    @Query("SELECT * FROM tabla_tareas WHERE usuarioId = :userId AND fecha = :fechaTxt AND enPapelera = 0 ORDER BY id DESC")
+    suspend fun obtenerPorFecha(userId: Int, fechaTxt: String): List<Tarea>
 
     @Insert
     suspend fun insertarTarea(tarea: Tarea)

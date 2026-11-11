@@ -35,28 +35,28 @@ class InterfazUsuario : AppCompatActivity() {
         val prefs = getSharedPreferences("MiSesionApp", Context.MODE_PRIVATE)
         idUsuarioLogueado = prefs.getInt("ID_USUARIO_LOGUEADO", -1)
 
-        // 2. Cargar ÚNICAMENTE los datos del usuario logueado
+        // 2. Si no hay sesión válida, forzar redirección al Login
+        if (idUsuarioLogueado == -1) {
+            val intent = Intent(this, InterfazLogin::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            startActivity(intent)
+            finish()
+            return
+        }
+
+        // 3. Cargar ÚNICAMENTE los datos del usuario logueado
         lifecycleScope.launch {
             try {
-                if (idUsuarioLogueado != -1) {
-                    val usuarioActual = db.usuarioDao().obtenerPorId(idUsuarioLogueado)
-                    usuarioActual?.let { user ->
-                        etNombre.setText(user.usuario)
-                        etCorreo.setText(user.correo)
-                        etContrasena.setText(user.contrasena)
-                        tvTitle?.text = "¡Hola, ${user.usuario}!"
-                    }
+                val usuarioActual = db.usuarioDao().obtenerPorId(idUsuarioLogueado)
+                if (usuarioActual != null) {
+                    etNombre.setText(usuarioActual.usuario)
+                    etCorreo.setText(usuarioActual.correo)
+                    etContrasena.setText(usuarioActual.contrasena)
+                    tvTitle?.text = "¡Hola, ${usuarioActual.usuario}!"
                 } else {
-                    // Si por alguna razón no hay ID, tomamos el último por respaldo
-                    val usuarios = db.usuarioDao().obtenerTodos()
-                    if (usuarios.isNotEmpty()) {
-                        val user = usuarios.last()
-                        idUsuarioLogueado = user.id
-                        etNombre.setText(user.usuario)
-                        etCorreo.setText(user.correo)
-                        etContrasena.setText(user.contrasena)
-                        tvTitle?.text = "¡Hola, ${user.usuario}!"
-                    }
+                    // Si el ID ya no existe en la BD, cerramos sesión
+                    cerrarSesion(prefs)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -99,15 +99,16 @@ class InterfazUsuario : AppCompatActivity() {
 
         // Cerrar Sesión y LIMPIAR datos de sesión
         btnLogout.setOnClickListener {
-            // Borrar el ID del usuario de SharedPreferences
-            val editor = prefs.edit()
-            editor.clear()
-            editor.apply()
-
-            val intent = Intent(this, InterfazLogin::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
-            finish()
+            cerrarSesion(prefs)
         }
+    }
+
+    private fun cerrarSesion(prefs: android.content.SharedPreferences) {
+        prefs.edit().clear().apply()
+        val intent = Intent(this, InterfazLogin::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        startActivity(intent)
+        finish()
     }
 }

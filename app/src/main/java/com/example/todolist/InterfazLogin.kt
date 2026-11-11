@@ -17,6 +17,18 @@ import kotlinx.coroutines.withContext
 class InterfazLogin : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // VERIFICACIÓN DE AUTO-LOGIN
+        // Si el usuario ya tiene sesión activa, lo mandamos directo a la pantalla principal
+        val prefs = getSharedPreferences("MiSesionApp", Context.MODE_PRIVATE)
+        val idUsuarioLogueado = prefs.getInt("ID_USUARIO_LOGUEADO", -1)
+
+        if (idUsuarioLogueado != -1) {
+            startActivity(Intent(this, InterfazLista::class.java))
+            finish()
+            return
+        }
+
         setContentView(R.layout.activity_interfaz_login)
 
         val etUser = findViewById<EditText>(R.id.ingresaUsuario)
@@ -43,7 +55,6 @@ class InterfazLogin : AppCompatActivity() {
                 withContext(Dispatchers.Main) {
                     if (usuarioEncontrado != null) {
                         // 💾 GUARDAR LA SESIÓN DEL USUARIO QUE ACABA DE INGRESAR
-                        val prefs = getSharedPreferences("MiSesionApp", Context.MODE_PRIVATE)
                         prefs.edit().putInt("ID_USUARIO_LOGUEADO", usuarioEncontrado.id).apply()
 
                         Toast.makeText(this@InterfazLogin, "¡Bienvenido ${usuarioEncontrado.usuario}!", Toast.LENGTH_SHORT).show()

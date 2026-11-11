@@ -1,5 +1,6 @@
 package com.example.todolist
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -26,11 +27,17 @@ class InterfazPapelera : AppCompatActivity() {
     private lateinit var adapter: PapeleraAdapter
     private lateinit var drawerLayout: DrawerLayout
 
+    private var idUsuarioLogueado: Int = -1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_interfaz_papelera)
 
         db = AppDatabase.getDatabase(this)
+
+        // 1. Obtener ID del usuario actualmente logueado
+        val prefs = getSharedPreferences("MiSesionApp", Context.MODE_PRIVATE)
+        idUsuarioLogueado = prefs.getInt("ID_USUARIO_LOGUEADO", -1)
 
         drawerLayout = findViewById(R.id.drawerLayout)
         val btnBurguer = findViewById<MaterialToolbar>(R.id.Burguer)
@@ -52,7 +59,7 @@ class InterfazPapelera : AppCompatActivity() {
         )
         rvPapelera.adapter = adapter
 
-        // 1. ABRIR EL DRAWER DE FORMA DIRECTA Y ROBUSTA
+        // Abrir el Drawer
         btnBurguer.setOnClickListener {
             drawerLayout.openDrawer(GravityCompat.START)
         }
@@ -60,7 +67,7 @@ class InterfazPapelera : AppCompatActivity() {
             drawerLayout.openDrawer(GravityCompat.START)
         }
 
-        // 2. NAVEGACIÓN COMPLETA DEL DRAWER LATERAL
+        // Navegación del Drawer Lateral
         navigationView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_calendario -> {
@@ -76,7 +83,6 @@ class InterfazPapelera : AppCompatActivity() {
                     // Ya estamos en Papelera
                 }
                 else -> {
-                    // Si tienes una opción de "Inicio" o "Lista" en el menú:
                     startActivity(Intent(this, InterfazLista::class.java))
                 }
             }
@@ -84,12 +90,11 @@ class InterfazPapelera : AppCompatActivity() {
             true
         }
 
-        // Acción al presionar el icono de basura en la esquina superior derecha
         btnPapeleraIcon.setOnClickListener {
             Toast.makeText(this, "Estás en la Papelera de tareas", Toast.LENGTH_SHORT).show()
         }
 
-        // Escuchador de texto para filtrar la papelera en tiempo real
+        // Filtrar papelera en tiempo real
         etBuscar.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -108,22 +113,26 @@ class InterfazPapelera : AppCompatActivity() {
 
     private fun cargarTareasPapelera() {
         lifecycleScope.launch {
-            val tareasEnPapelera = db.tareaDao().obtenerPapelera()
-            adapter.actualizarLista(tareasEnPapelera)
+            if (idUsuarioLogueado != -1) {
+                val tareasEnPapelera = db.tareaDao().obtenerPapeleraDeUsuario(idUsuarioLogueado)
+                adapter.actualizarLista(tareasEnPapelera)
+            }
         }
     }
 
     private fun filtrarPapelera(query: String) {
         lifecycleScope.launch {
-            val tareasEnPapelera = db.tareaDao().obtenerPapelera()
-            if (query.isBlank()) {
-                adapter.actualizarLista(tareasEnPapelera)
-            } else {
-                val filtradas = tareasEnPapelera.filter {
-                    it.titulo.contains(query, ignoreCase = true) ||
-                            it.descripcion.contains(query, ignoreCase = true)
+            if (idUsuarioLogueado != -1) {
+                val tareasEnPapelera = db.tareaDao().obtenerPapeleraDeUsuario(idUsuarioLogueado)
+                if (query.isBlank()) {
+                    adapter.actualizarLista(tareasEnPapelera)
+                } else {
+                    val filtradas = tareasEnPapelera.filter {
+                        it.titulo.contains(query, ignoreCase = true) ||
+                                it.descripcion.contains(query, ignoreCase = true)
+                    }
+                    adapter.actualizarLista(filtradas)
                 }
-                adapter.actualizarLista(filtradas)
             }
         }
     }

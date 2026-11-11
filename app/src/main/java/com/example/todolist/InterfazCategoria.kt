@@ -1,5 +1,6 @@
 package com.example.todolist
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -28,11 +29,17 @@ class InterfazCategoria : AppCompatActivity() {
     private lateinit var etBuscar: EditText
     private lateinit var drawerLayout: DrawerLayout
 
+    private var idUsuarioLogueado: Int = -1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_interfaz_categoria)
 
         db = AppDatabase.getDatabase(this)
+
+        // Obtener el ID del usuario con la sesión activa
+        val prefs = getSharedPreferences("MiSesionApp", Context.MODE_PRIVATE)
+        idUsuarioLogueado = prefs.getInt("ID_USUARIO_LOGUEADO", -1)
 
         drawerLayout = findViewById(R.id.drawerLayout)
         val tvMenu = findViewById<MaterialToolbar>(R.id.tvMenu)
@@ -43,7 +50,7 @@ class InterfazCategoria : AppCompatActivity() {
         etBuscar = findViewById(R.id.etBuscar)
         rvCategorias = findViewById(R.id.rvCategorias)
 
-        // Configurar RecyclerView usando CategoriaAdapter con Clic, Editar y Borrar
+        // Configuración del RecyclerView usando las referencias corregidas del adapter
         rvCategorias.layoutManager = LinearLayoutManager(this)
         adapter = CategoriaAdapter(
             listaCategorias = emptyList(),
@@ -53,7 +60,7 @@ class InterfazCategoria : AppCompatActivity() {
         )
         rvCategorias.adapter = adapter
 
-        // Búsqueda en tiempo real de categorías
+        // Buscador filtrando solo entre categorías del usuario activo
         etBuscar.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -62,7 +69,6 @@ class InterfazCategoria : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {}
         })
 
-        // Abrir el menú desplegable al hacer clic en la hamburguesa
         tvMenu.setOnClickListener {
             drawerLayout.openDrawer(GravityCompat.START)
         }
@@ -70,12 +76,11 @@ class InterfazCategoria : AppCompatActivity() {
             drawerLayout.openDrawer(GravityCompat.START)
         }
 
-        // Navegación en el Drawer
         navigationView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_calendario -> startActivity(Intent(this, InterfazCalendario::class.java))
                 R.id.nav_papelera -> startActivity(Intent(this, InterfazPapelera::class.java))
-                R.id.nav_categoria -> { /* Ya estamos en categoría */ }
+                R.id.nav_categoria -> { /* Ya estamos aquí */ }
                 R.id.nav_usuario -> startActivity(Intent(this, InterfazUsuario::class.java))
                 else -> startActivity(Intent(this, InterfazLista::class.java))
             }
@@ -87,7 +92,6 @@ class InterfazCategoria : AppCompatActivity() {
             startActivity(Intent(this, InterfazUsuario::class.java))
         }
 
-        // Botón '+' para agregar nueva categoría con colores pastel
         fabAdd.setOnClickListener {
             mostrarDialogoNuevaCategoria()
         }
@@ -97,8 +101,10 @@ class InterfazCategoria : AppCompatActivity() {
 
     private fun cargarCategorias() {
         lifecycleScope.launch {
-            val lista = db.categoriaDao().obtenerTodas()
-            adapter.actualizarLista(lista)
+            if (idUsuarioLogueado != -1) {
+                val lista = db.categoriaDao().obtenerTodasDeUsuario(idUsuarioLogueado)
+                adapter.actualizarLista(lista)
+            }
         }
     }
 
@@ -106,14 +112,13 @@ class InterfazCategoria : AppCompatActivity() {
         lifecycleScope.launch {
             if (query.isBlank()) {
                 cargarCategorias()
-            } else {
-                val listaFiltrada = db.categoriaDao().buscarCategorias(query)
+            } else if (idUsuarioLogueado != -1) {
+                val listaFiltrada = db.categoriaDao().buscarCategorias(idUsuarioLogueado, query)
                 adapter.actualizarLista(listaFiltrada)
             }
         }
     }
 
-    // --- DIÁLOGO CREAR NUEVA CATEGORÍA (12 COLORES SIN REPETIR) ---
     private fun mostrarDialogoNuevaCategoria() {
         val dialogView = layoutInflater.inflate(R.layout.dialogo_nueva_categoria, null)
 
@@ -144,13 +149,14 @@ class InterfazCategoria : AppCompatActivity() {
 
                 if (nombre.isNotEmpty()) {
                     lifecycleScope.launch {
-                        val existentes = db.categoriaDao().obtenerTodas()
+                        val existentes = db.categoriaDao().obtenerTodasDeUsuario(idUsuarioLogueado)
                         val colorUsado = existentes.any { it.colorHex.equals(colorHexSeleccionado, ignoreCase = true) }
 
                         if (colorUsado) {
                             Toast.makeText(this@InterfazCategoria, "Ese color ya lo usa otra categoría, elige otro.", Toast.LENGTH_LONG).show()
                         } else {
                             val nuevaCat = Categoria(
+                                usuarioId = idUsuarioLogueado,
                                 nombre = nombre,
                                 descripcion = descripcion,
                                 colorHex = colorHexSeleccionado
@@ -169,7 +175,6 @@ class InterfazCategoria : AppCompatActivity() {
             .show()
     }
 
-    // --- DIÁLOGO EDITAR CATEGORÍA ---
     private fun mostrarDialogoEditarCategoria(categoria: Categoria) {
         val dialogView = layoutInflater.inflate(R.layout.dialogo_nueva_categoria, null)
         val etNombre = dialogView.findViewById<EditText>(R.id.etNombreCategoria)
@@ -202,7 +207,7 @@ class InterfazCategoria : AppCompatActivity() {
 
                 if (nuevoNombre.isNotEmpty()) {
                     lifecycleScope.launch {
-                        val existentes = db.categoriaDao().obtenerTodas()
+                        val existentes = db.categoriaDao().obtenerTodasDeUsuario(idUsuarioLogueado)
                         val colorUsadoPorOtra = existentes.any {
                             it.id != categoria.id && it.colorHex.equals(colorHexSeleccionado, ignoreCase = true)
                         }
@@ -227,7 +232,6 @@ class InterfazCategoria : AppCompatActivity() {
             .show()
     }
 
-    // --- CONFIRMAR ELIMINACIÓN ---
     private fun confirmarEliminarCategoria(categoria: Categoria) {
         AlertDialog.Builder(this)
             .setTitle("Eliminar Categoría")
@@ -243,10 +247,9 @@ class InterfazCategoria : AppCompatActivity() {
             .show()
     }
 
-    // --- MOSTRAR TAREAS ASOCIADAS AL HACER CLIC EN LA TARJETA ---
     private fun mostrarTareasDeCategoria(categoria: Categoria) {
         lifecycleScope.launch {
-            val tareas = db.categoriaDao().obtenerTareasPorCategoria(categoria.nombre)
+            val tareas = db.categoriaDao().obtenerTareasPorCategoria(idUsuarioLogueado, categoria.nombre)
             val listaTextos = if (tareas.isNotEmpty()) {
                 tareas.map { "• ${it.titulo}" }.toTypedArray()
             } else {
