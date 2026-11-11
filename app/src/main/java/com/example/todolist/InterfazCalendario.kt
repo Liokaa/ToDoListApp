@@ -78,7 +78,7 @@ class InterfazCalendario : AppCompatActivity() {
 
         navigationView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
-                R.id.nav_calendario -> { /* Ya estamos en calendario */ }
+                R.id.nav_lista -> startActivity(Intent(this, InterfazLista::class.java))
                 R.id.nav_papelera -> startActivity(Intent(this, InterfazPapelera::class.java))
                 R.id.nav_categoria -> startActivity(Intent(this, InterfazCategoria::class.java))
                 R.id.nav_usuario -> startActivity(Intent(this, InterfazUsuario::class.java))
