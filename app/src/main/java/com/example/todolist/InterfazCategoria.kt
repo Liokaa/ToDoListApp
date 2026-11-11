@@ -1,18 +1,23 @@
 package com.example.todolist
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.launch
 
 class InterfazCategoria : AppCompatActivity() {
@@ -21,6 +26,7 @@ class InterfazCategoria : AppCompatActivity() {
     private lateinit var rvCategorias: RecyclerView
     private lateinit var adapter: CategoriaAdapter
     private lateinit var etBuscar: EditText
+    private lateinit var drawerLayout: DrawerLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,9 +34,12 @@ class InterfazCategoria : AppCompatActivity() {
 
         db = AppDatabase.getDatabase(this)
 
-        val tvMenu = findViewById<TextView>(R.id.tvMenu)
-        val tvUser = findViewById<TextView>(R.id.tvUser)
+        drawerLayout = findViewById(R.id.drawerLayout)
+        val tvMenu = findViewById<MaterialToolbar>(R.id.tvMenu)
+        val tvUser = findViewById<ImageButton>(R.id.tvUser)
+        val navigationView = findViewById<NavigationView>(R.id.navigationView)
         val fabAdd = findViewById<FloatingActionButton>(R.id.fabAdd)
+
         etBuscar = findViewById(R.id.etBuscar)
         rvCategorias = findViewById(R.id.rvCategorias)
 
@@ -53,10 +62,29 @@ class InterfazCategoria : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {}
         })
 
-        tvMenu?.setOnClickListener { finish() }
+        // Abrir el menú desplegable al hacer clic en la hamburguesa
+        tvMenu.setOnClickListener {
+            drawerLayout.openDrawer(GravityCompat.START)
+        }
+        tvMenu.setNavigationOnClickListener {
+            drawerLayout.openDrawer(GravityCompat.START)
+        }
 
-        tvUser?.setOnClickListener {
-            Toast.makeText(this, "Perfil de usuario", Toast.LENGTH_SHORT).show()
+        // Navegación en el Drawer
+        navigationView.setNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.nav_calendario -> startActivity(Intent(this, InterfazCalendario::class.java))
+                R.id.nav_papelera -> startActivity(Intent(this, InterfazPapelera::class.java))
+                R.id.nav_categoria -> { /* Ya estamos en categoría */ }
+                R.id.nav_usuario -> startActivity(Intent(this, InterfazUsuario::class.java))
+                else -> startActivity(Intent(this, InterfazLista::class.java))
+            }
+            drawerLayout.closeDrawer(GravityCompat.START)
+            true
+        }
+
+        tvUser.setOnClickListener {
+            startActivity(Intent(this, InterfazUsuario::class.java))
         }
 
         // Botón '+' para agregar nueva categoría con colores pastel

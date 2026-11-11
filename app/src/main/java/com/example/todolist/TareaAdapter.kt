@@ -8,14 +8,21 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class TareaAdapter(
     private var listaTareas: List<Tarea>,
-    private val onCheckChanged: (Tarea, Boolean) -> Unit,
+    private val onEstadoCambiado: (Tarea) -> Unit,
     private val onDeleteClicked: (Tarea) -> Unit,
-    private val onItemClicked: ((Tarea) -> Unit)? = null // Para abrir el diálogo de editar al hacer clic
+    private val onItemClicked: ((Tarea) -> Unit)? = null
 ) : RecyclerView.Adapter<TareaAdapter.TareaViewHolder>() {
+
+    private val cacheColores = mutableMapOf<String, String>()
 
     class TareaViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val viewColorCategoria: View = view.findViewById(R.id.viewColorCategoria)
@@ -36,43 +43,66 @@ class TareaAdapter(
     override fun onBindViewHolder(holder: TareaViewHolder, position: Int) {
         val tarea = listaTareas[position]
 
-        // 1. Título y Descripción
-        holder.tvTitulo.text = tarea.titulo
-        holder.tvDescripcion.text = tarea.descripcion
+        // 1. Manejo visual de estados: PENDIENTE, EN_PROGRESO, COMPLETADA
+        holder.cbCompletada.setOnCheckedChangeListener(null)
 
-        // 2. Fecha (Formato DD/MM/YYYY)
+        when (tarea.estado) {
+            "EN_PROGRESO" -> {
+                holder.cbCompletada.isChecked = false
+                holder.tvTitulo.text = "⏳ ${tarea.titulo} (En Progreso)"
+                holder.tvTitulo.paintFlags = holder.tvTitulo.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+            }
+            "COMPLETADA" -> {
+                holder.cbCompletada.isChecked = true
+                holder.tvTitulo.text = tarea.titulo
+                holder.tvTitulo.paintFlags = holder.tvTitulo.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+            }
+            else -> { // PENDIENTE
+                holder.cbCompletada.isChecked = false
+                holder.tvTitulo.text = tarea.titulo
+                holder.tvTitulo.paintFlags = holder.tvTitulo.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+            }
+        }
+
+        // 2. Descripción y Fecha
+        holder.tvDescripcion.text = tarea.descripcion
         holder.tvFecha.text = if (tarea.fecha.isNotBlank()) "📅 ${tarea.fecha}" else "📅 Sin fecha"
 
-        // 3. Categoría y Color dinámico
+        // 3. Cargar Categoría y su Color Pastel dinámico desde Room
         val catNombre = if (tarea.categoria.isNotBlank()) tarea.categoria else "General"
         holder.tvCategoria.text = catNombre.uppercase()
 
-        // Colores según tu categoría ("Cat 1", "Cat 2", "Cat 3" o por nombre)
-        val colorHex = when (catNombre.lowercase()) {
-            "cat 1", "trabajo" -> "#4A90E2"   // Azul
-            "cat 2", "estudio" -> "#7E57C2"   // Morado
-            "cat 3", "personal" -> "#66BB6A"  // Verde
-            "hogar" -> "#FFA726"             // Naranja
-            else -> "#70B5F6"                // Azul principal por defecto
-        }
+        val context = holder.itemView.context
+        val activity = context as? AppCompatActivity
 
-        val colorInt = Color.parseColor(colorHex)
-        holder.viewColorCategoria.setBackgroundColor(colorInt)
-        holder.tvCategoria.setTextColor(colorInt)
-
-        // 4. Estado de CheckBox (Completada / Pendiente) y texto tachado
-        holder.cbCompletada.setOnCheckedChangeListener(null)
-        holder.cbCompletada.isChecked = tarea.completada
-
-        if (tarea.completada) {
-            holder.tvTitulo.paintFlags = holder.tvTitulo.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+        if (cacheColores.containsKey(catNombre.lowercase())) {
+            val colorHex = cacheColores[catNombre.lowercase()] ?: "#C3B1E1"
+            aplicarColor(holder, colorHex)
         } else {
-            holder.tvTitulo.paintFlags = holder.tvTitulo.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+            activity?.lifecycleScope?.launch(Dispatchers.IO) {
+                val db = AppDatabase.getDatabase(context)
+                val listaCategorias = db.categoriaDao().obtenerTodas()
+                val match = listaCategorias.find { it.nombre.equals(catNombre, ignoreCase = true) }
+
+                val colorHex = match?.colorHex ?: "#C3B1E1"
+                cacheColores[catNombre.lowercase()] = colorHex
+
+                withContext(Dispatchers.Main) {
+                    aplicarColor(holder, colorHex)
+                }
+            }
         }
 
-        // 5. Listeners de interacción
-        holder.cbCompletada.setOnCheckedChangeListener { _, isChecked ->
-            onCheckChanged(tarea, isChecked)
+        // 4. Cambiar de estado cíclicamente al pulsar el CheckBox: PENDIENTE -> EN_PROGRESO -> COMPLETADA -> PENDIENTE
+        holder.cbCompletada.setOnClickListener {
+            val siguienteEstado = when (tarea.estado) {
+                "PENDIENTE" -> "EN_PROGRESO"
+                "EN_PROGRESO" -> "COMPLETADA"
+                else -> "PENDIENTE"
+            }
+            val esCompletada = siguienteEstado == "COMPLETADA"
+            val tareaActualizada = tarea.copy(estado = siguienteEstado, completada = esCompletada)
+            onEstadoCambiado(tareaActualizada)
         }
 
         holder.btnEliminar.setOnClickListener {
@@ -84,10 +114,23 @@ class TareaAdapter(
         }
     }
 
+    private fun aplicarColor(holder: TareaViewHolder, colorHex: String) {
+        try {
+            val colorInt = Color.parseColor(colorHex)
+            holder.viewColorCategoria.setBackgroundColor(colorInt)
+            holder.tvCategoria.setTextColor(colorInt)
+        } catch (e: Exception) {
+            val colorDefault = Color.parseColor("#C3B1E1")
+            holder.viewColorCategoria.setBackgroundColor(colorDefault)
+            holder.tvCategoria.setTextColor(colorDefault)
+        }
+    }
+
     override fun getItemCount(): Int = listaTareas.size
 
     fun actualizarLista(nuevaLista: List<Tarea>) {
         listaTareas = nuevaLista
+        cacheColores.clear()
         notifyDataSetChanged()
     }
 }

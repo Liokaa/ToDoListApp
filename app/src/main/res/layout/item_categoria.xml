@@ -4,27 +4,29 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="8dp"
-    android:layout_marginVertical="4dp"
-    app:cardCornerRadius="8dp"
+    android:layout_marginVertical="6dp"
+    app:cardBackgroundColor="#FFFFFF"
+    app:cardCornerRadius="12dp"
     app:cardElevation="3dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="#FFFFFF">
 
-        <!-- Barra indicador de color de la categoría -->
+        <!-- Indicador de color pastel lateral -->
         <View
             android:id="@+id/viewColorBarra"
-            android:layout_width="10dp"
+            android:layout_width="12dp"
             android:layout_height="match_parent"
-            android:background="#4A90E2" />
+            android:background="#C3B1E1" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="12dp">
+            android:padding="16dp">
 
             <TextView
                 android:id="@+id/tvNombre"
@@ -39,7 +41,7 @@
                 android:id="@+id/tvDescripcion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="4dp"
                 android:text="Descripción de la categoría"
                 android:textColor="#666666"
                 android:textSize="14sp" />

@@ -8,8 +8,9 @@ data class Tarea(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val titulo: String,
     val descripcion: String,
-    val categoria: String = "Cat 1", // Cat 1, Cat 2, Cat 3
-    val fecha: String = "",          // Formato: DD/MM/YYYY
-    val completada: Boolean = false,
-    val enPapelera: Boolean = false  // false = Pantalla principal / true = Papelera
+    val fecha: String,
+    val categoria: String,
+    val estado: String = "PENDIENTE", // Puede ser: "PENDIENTE", "EN_PROGRESO", "COMPLETADA"
+    val completada: Boolean = false,   // Lo dejamos por compatibilidad si lo usas
+    val enPapelera: Boolean = false
 )

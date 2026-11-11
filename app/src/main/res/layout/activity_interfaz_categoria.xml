@@ -1,105 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:background="#F2EDDE">
+    android:background="#FAF6E8">
 
-    <View
-        android:id="@+id/headerBackground"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="#92ECF6"
-        android:layout_marginStart="-16dp"
-        android:layout_marginEnd="-16dp"
-        android:layout_marginTop="-12dp"
-        android:layout_marginBottom="-12dp"
-        app:layout_constraintTop_toTopOf="@+id/tvMenu"
-        app:layout_constraintBottom_toBottomOf="@+id/tvMenu"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <TextView
-        android:id="@+id/tvMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="☰"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="#333333"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Categorías"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="#333333"
-        app:layout_constraintBottom_toBottomOf="@+id/tvMenu"
-        app:layout_constraintEnd_toStartOf="@+id/tvUser"
-        app:layout_constraintStart_toEndOf="@+id/tvMenu"
-        app:layout_constraintTop_toTopOf="@+id/tvMenu" />
-
-    <TextView
-        android:id="@+id/tvUser"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="👤"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tvBuscar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Buscar"
-        android:textColor="#333333"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvMenu" />
-
-    <EditText
-        android:id="@+id/etBuscar"
-        android:layout_width="0dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="12dp"
-        android:background="@android:drawable/editbox_background_normal"
-        android:hint="🔍 Buscar categoría..."
-        android:paddingStart="15dp"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@+id/tvBuscar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tvBuscar"
-        app:layout_constraintTop_toTopOf="@+id/tvBuscar" />
-
-    <!-- RecyclerView para mostrar las tarjetas de CATEGORÍAS (con nombre, descripción y cuadro de color) -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvCategorias"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvBuscar"
-        tools:listitem="@layout/item_categoria" />
+        android:layout_height="match_parent">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAdd"
+        <!-- Header superior azul pastel -->
+        <RelativeLayout
+            android:id="@+id/headerBackground"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="#92ECF6"
+            android:paddingHorizontal="8dp"
+            android:gravity="center_vertical"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <!-- Menú Hamburguesa en la esquina izquierda -->
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/tvMenu"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                app:navigationIcon="@android:drawable/ic_menu_sort_by_size"
+                app:navigationIconTint="#FFFFFF"
+                android:contentDescription="Menú desplegable"/>
+
+            <!-- Título centrado -->
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Categorías"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <!-- Icono de usuario en la esquina derecha -->
+            <ImageButton
+                android:id="@+id/tvUser"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_usuario"
+                android:contentDescription="Perfil de usuario"
+                app:tint="#FFFFFF"/>
+        </RelativeLayout>
+
+        <!-- Sección de Búsqueda -->
+        <LinearLayout
+            android:id="@+id/layoutBuscar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            android:gravity="center_vertical"
+            app:layout_constraintTop_toBottomOf="@+id/headerBackground">
+
+            <TextView
+                android:id="@+id/tvBuscar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Buscar"
+                android:textColor="#333333"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/etBuscar"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_weight="1"
+                android:layout_marginStart="12dp"
+                android:background="@android:drawable/editbox_background_normal"
+                android:hint="🔍 Buscar categoría..."
+                android:textColor="#333333"
+                android:textColorHint="#888888"
+                android:paddingStart="15dp"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- Lista de Categorías -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvCategorias"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="12dp"
+            android:paddingHorizontal="8dp"
+            android:clipToPadding="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layoutBuscar"
+            tools:listitem="@layout/item_categoria" />
+
+        <!-- Botón flotante '+' -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:contentDescription="Agregar"
+            app:backgroundTint="#00BCD4"
+            app:srcCompat="@android:drawable/ic_input_add"
+            app:tint="#FFFFFF"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Drawer Lateral para el menú navegable -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigationView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:contentDescription="Agregar"
-        app:backgroundTint="#00BCD4"
-        app:srcCompat="@android:drawable/ic_input_add"
-        app:tint="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:menu="@menu/menu" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.drawerlayout.widget.DrawerLayout>

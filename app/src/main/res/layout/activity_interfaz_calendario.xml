@@ -13,54 +13,60 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- Header superior pastel -->
-        <LinearLayout
+        <!-- Header superior pastel (Ajustado) -->
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="70dp"
             android:background="#A2DEFF"
-            android:gravity="center"
-            android:padding="16dp">
+            android:paddingHorizontal="8dp"
+            android:gravity="center_vertical">
 
-            <Toolbar
-                android:layout_width="match_parent"
-                android:layout_height="70dp">
+            <!-- Hamburguesa alineada totalmente a la izquierda -->
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/Burguer"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                app:navigationIcon="@android:drawable/ic_menu_sort_by_size"
+                app:navigationIconTint="#FFFFFF"
+                android:contentDescription="Menú desplegable"/>
 
-                <com.google.android.material.appbar.MaterialToolbar
-                    android:id="@+id/Burguer"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginRight="30dp"
-                    app:navigationIcon="@android:drawable/ic_menu_sort_by_size"
-                    app:navigationIconTint="#FFFFFF"
-                    android:contentDescription="Menú desplegable"/>
+            <!-- Título centrado automáticamente -->
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Calendario"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/tvTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Calendario"
-                    android:textColor="#FFFFFF"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:layout_marginRight="40dp"/>
+            <!-- Perfil alineado totalmente a la derecha -->
+            <ImageButton
+                android:id="@+id/btnUsuario"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_usuario"
+                android:contentDescription="Perfil de usuario"
+                app:tint="#FFFFFF"/>
+        </RelativeLayout>
 
-                <ImageButton
-                    android:id="@+id/btnUsuario"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/ic_usuario"
-                    android:contentDescription="Perfil de usuario"
-                    app:tint="#FFFFFF"/>
-            </Toolbar>
-        </LinearLayout>
-
-        <!-- Calendario -->
+        <!-- Calendario con contraste de color activado -->
         <CalendarView
             android:id="@+id/calendarView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="8dp"
+            android:theme="@style/ThemeOverlay.AppCompat.Light"
+            android:focusedMonthDateColor="#333333"
+            android:unfocusedMonthDateColor="#888888"
+            android:weekNumberColor="#333333"
+            android:selectedWeekBackgroundColor="#A2DEFF" />
 
         <!-- Título dinámico con la fecha seleccionada -->
         <TextView

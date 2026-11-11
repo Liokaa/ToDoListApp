@@ -51,8 +51,8 @@ class InterfazLista : AppCompatActivity() {
 
         adapter = TareaAdapter(
             listaTareas = emptyList(),
-            onCheckChanged = { tarea, estaCompletada ->
-                actualizarEstadoTarea(tarea, estaCompletada)
+            onEstadoCambiado = { tareaActualizada ->
+                actualizarTareaEnRoom(tareaActualizada)
             },
             onDeleteClicked = { tarea ->
                 moverAPapelera(tarea)
@@ -119,6 +119,7 @@ class InterfazLista : AppCompatActivity() {
                     it.titulo.contains(query, ignoreCase = true) ||
                             it.descripcion.contains(query, ignoreCase = true) ||
                             it.categoria.contains(query, ignoreCase = true) ||
+                            it.estado.contains(query, ignoreCase = true) ||
                             it.fecha.contains(query, ignoreCase = true)
                 }
                 adapter.actualizarLista(filtradas)
@@ -126,10 +127,10 @@ class InterfazLista : AppCompatActivity() {
         }
     }
 
-    private fun actualizarEstadoTarea(tarea: Tarea, estaCompletada: Boolean) {
+    private fun actualizarTareaEnRoom(tarea: Tarea) {
         lifecycleScope.launch {
-            val tareaActualizada = tarea.copy(completada = estaCompletada)
-            db.tareaDao().actualizarTarea(tareaActualizada)
+            db.tareaDao().actualizarTarea(tarea)
+            cargarTareas()
         }
     }
 
@@ -161,7 +162,7 @@ class InterfazLista : AppCompatActivity() {
             setText(tareaParaEditar?.descripcion ?: "")
         }
 
-        // 1. Selector de fecha con DatePickerDialog (Pop-up de Calendario)
+        // 1. Selector de fecha con DatePickerDialog
         var fechaSeleccionada = tareaParaEditar?.fecha ?: ""
         val btnFecha = Button(this).apply {
             text = if (fechaSeleccionada.isEmpty()) "Seleccionar fecha 📅" else "Fecha: $fechaSeleccionada"
@@ -182,21 +183,39 @@ class InterfazLista : AppCompatActivity() {
             datePicker.show()
         }
 
-        // 2. Desplegable Spinner para seleccionar Categoría
+        // 2. Selector de Categoría dinámica desde Room
         val tvCategoriaLabel = TextView(this).apply {
             text = "Categoría:"
             textSize = 14f
-            setPadding(0, 16, 0, 4)
+            setPadding(0, 12, 0, 4)
         }
         val spinnerCategoria = Spinner(this)
+
+        // 3. Selector de Estado (PENDIENTE, EN_PROGRESO, COMPLETADA)
+        val tvEstadoLabel = TextView(this).apply {
+            text = "Estado inicial:"
+            textSize = 14f
+            setPadding(0, 12, 0, 4)
+        }
+        val spinnerEstado = Spinner(this)
+        val opcionesEstado = listOf("PENDIENTE", "EN_PROGRESO", "COMPLETADA")
+        val adapterEstado = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, opcionesEstado)
+        spinnerEstado.adapter = adapterEstado
+
+        tareaParaEditar?.let {
+            val idx = opcionesEstado.indexOf(it.estado)
+            if (idx >= 0) spinnerEstado.setSelection(idx)
+        }
 
         layout.addView(inputTitulo)
         layout.addView(inputDescripcion)
         layout.addView(btnFecha)
         layout.addView(tvCategoriaLabel)
         layout.addView(spinnerCategoria)
+        layout.addView(tvEstadoLabel)
+        layout.addView(spinnerEstado)
 
-        // Cargar las categorías guardadas en la base de datos
+        // Cargar categorías guardadas en la base de datos
         lifecycleScope.launch {
             val categoriasGuardadas = db.categoriaDao().obtenerTodas()
             val nombresCategorias = if (categoriasGuardadas.isEmpty()) {
@@ -205,14 +224,13 @@ class InterfazLista : AppCompatActivity() {
                 categoriasGuardadas.map { it.nombre }
             }
 
-            val adapterSpinner = ArrayAdapter(
+            val adapterSpinnerCat = ArrayAdapter(
                 this@InterfazLista,
                 android.R.layout.simple_spinner_dropdown_item,
                 nombresCategorias
             )
-            spinnerCategoria.adapter = adapterSpinner
+            spinnerCategoria.adapter = adapterSpinnerCat
 
-            // Si se está editando una tarea, seleccionar la categoría previa en el Spinner
             tareaParaEditar?.let { tarea ->
                 val index = nombresCategorias.indexOf(tarea.categoria)
                 if (index >= 0) {
@@ -227,15 +245,22 @@ class InterfazLista : AppCompatActivity() {
             val titulo = inputTitulo.text.toString().trim()
             val descripcion = inputDescripcion.text.toString().trim()
             val categoriaElegida = spinnerCategoria.selectedItem?.toString() ?: "General"
+            val estadoElegido = spinnerEstado.selectedItem?.toString() ?: "PENDIENTE"
 
-            // Si el usuario no eligió fecha, asignar por defecto la fecha de HOY
             if (fechaSeleccionada.isEmpty()) {
                 val cal = Calendar.getInstance()
                 fechaSeleccionada = String.format("%02d/%02d/%d", cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.YEAR))
             }
 
             if (titulo.isNotEmpty()) {
-                guardarTareaEnRoom(tareaParaEditar, titulo, descripcion, fechaSeleccionada, categoriaElegida)
+                guardarTareaEnRoom(
+                    tareaParaEditar = tareaParaEditar,
+                    titulo = titulo,
+                    descripcion = descripcion,
+                    fecha = fechaSeleccionada,
+                    categoria = categoriaElegida,
+                    estado = estadoElegido
+                )
             } else {
                 Toast.makeText(this, "El título no puede estar vacío", Toast.LENGTH_SHORT).show()
             }
@@ -251,10 +276,13 @@ class InterfazLista : AppCompatActivity() {
         titulo: String,
         descripcion: String,
         fecha: String,
-        categoria: String
+        categoria: String,
+        estado: String
     ) {
         lifecycleScope.launch {
             try {
+                val esCompletada = estado == "COMPLETADA"
+
                 if (tareaParaEditar == null) {
                     val nuevaTarea = Tarea(
                         id = 0,
@@ -262,7 +290,8 @@ class InterfazLista : AppCompatActivity() {
                         descripcion = descripcion,
                         fecha = fecha,
                         categoria = categoria,
-                        completada = false,
+                        estado = estado,
+                        completada = esCompletada,
                         enPapelera = false
                     )
                     db.tareaDao().insertarTarea(nuevaTarea)
@@ -272,7 +301,9 @@ class InterfazLista : AppCompatActivity() {
                         titulo = titulo,
                         descripcion = descripcion,
                         fecha = fecha,
-                        categoria = categoria
+                        categoria = categoria,
+                        estado = estado,
+                        completada = esCompletada
                     )
                     db.tareaDao().actualizarTarea(tareaActualizada)
                     Toast.makeText(this@InterfazLista, "¡Tarea actualizada!", Toast.LENGTH_SHORT).show()
