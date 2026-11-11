@@ -17,7 +17,11 @@ interface UsuarioDao {
     @Query("SELECT * FROM tabla_usuarios WHERE usuario = :user OR correo = :email LIMIT 1")
     suspend fun existeUsuario(user: String, email: String): Usuario?
 
-    // Método agregado para obtener todos los usuarios
+    // Método para consultar un usuario específico por su ID de sesión
+    @Query("SELECT * FROM tabla_usuarios WHERE id = :id LIMIT 1")
+    suspend fun obtenerPorId(id: Int): Usuario?
+
+    // Método para obtener todos los usuarios
     @Query("SELECT * FROM tabla_usuarios")
     suspend fun obtenerTodos(): List<Usuario>
 }

@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Nueva Categoría"
-        android:textSize="18sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         android:textColor="#333333"
         android:layout_marginBottom="12dp" />
@@ -17,71 +17,144 @@
     <EditText
         android:id="@+id/etNombreCategoria"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Nombre de la categoría (ej: Trabajo)" />
+        android:layout_height="48dp"
+        android:background="@android:drawable/editbox_background_normal"
+        android:hint="Nombre de la categoría (ej: Trabajo)"
+        android:paddingHorizontal="12dp"
+        android:textColor="#333333"
+        android:textColorHint="#888888"
+        android:textSize="14sp" />
 
     <EditText
         android:id="@+id/etDescripcionCategoria"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginTop="8dp"
-        android:hint="Descripción (opcional)" />
+        android:background="@android:drawable/editbox_background_normal"
+        android:hint="Descripción (opcional)"
+        android:paddingHorizontal="12dp"
+        android:textColor="#333333"
+        android:textColorHint="#888888"
+        android:textSize="14sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Selecciona un color:"
+        android:text="Selecciona un color pastel:"
         android:textColor="#555555"
         android:textSize="14sp"
+        android:textStyle="bold"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="8dp" />
 
-    <!-- Opciones de Colores Pasteles -->
+    <!-- Opciones de 12 Colores Pasteles en 2 filas -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:gravity="center">
 
-        <!-- Morado Pastel (#C3B1E1) -->
-        <Button
-            android:id="@+id/btnColorMorado"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_margin="4dp"
-            android:backgroundTint="#C3B1E1" />
+        <!-- Fila 1 (Colores 1 al 6) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
 
-        <!-- Amarillo Pastel (#FDFD96) -->
-        <Button
-            android:id="@+id/btnColorAmarillo"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_margin="4dp"
-            android:backgroundTint="#FDFD96" />
+            <Button
+                android:id="@+id/c1"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_margin="3dp"
+                android:backgroundTint="#C3B1E1" />
 
-        <!-- Rosa Pastel (#F8C8DC) -->
-        <Button
-            android:id="@+id/btnColorRosa"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_margin="4dp"
-            android:backgroundTint="#F8C8DC" />
+            <Button
+                android:id="@+id/c2"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_margin="3dp"
+                android:backgroundTint="#FDFD96" />
 
-        <!-- Azul Pastel (#A2DEFF) -->
-        <Button
-            android:id="@+id/btnColorAzul"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_margin="4dp"
-            android:backgroundTint="#A2DEFF" />
+            <Button
+                android:id="@+id/c3"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_margin="3dp"
+                android:backgroundTint="#F8C8DC" />
 
-        <!-- Verde Pastel (#B2FBA5) -->
-        <Button
-            android:id="@+id/btnColorVerde"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_margin="4dp"
-            android:backgroundTint="#B2FBA5" />
+            <Button
+                android:id="@+id/c4"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_margin="3dp"
+                android:backgroundTint="#A2DEFF" />
+
+            <Button
+                android:id="@+id/c5"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_margin="3dp"
+                android:backgroundTint="#B2FBA5" />
+
+            <Button
+                android:id="@+id/c6"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_margin="3dp"
+                android:backgroundTint="#FFDAC1" />
+        </LinearLayout>
+
+        <!-- Fila 2 (Colores 7 al 12) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="4dp">
+
+            <Button
+                android:id="@+id/c7"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_margin="3dp"
+                android:backgroundTint="#E2F0CB" />
+
+            <Button
+                android:id="@+id/c8"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_margin="3dp"
+                android:backgroundTint="#FFB7B2" />
+
+            <Button
+                android:id="@+id/c9"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_margin="3dp"
+                android:backgroundTint="#D0F4DE" />
+
+            <Button
+                android:id="@+id/c10"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_margin="3dp"
+                android:backgroundTint="#FCF6BD" />
+
+            <Button
+                android:id="@+id/c11"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_margin="3dp"
+                android:backgroundTint="#D9C5F2" />
+
+            <Button
+                android:id="@+id/c12"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_margin="3dp"
+                android:backgroundTint="#B5EAD7" />
+        </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

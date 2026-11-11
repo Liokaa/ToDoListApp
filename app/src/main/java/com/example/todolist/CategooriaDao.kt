@@ -19,4 +19,8 @@ interface CategoriaDao {
 
     @Query("SELECT * FROM tabla_categorias WHERE nombre LIKE '%' || :query || '%'")
     suspend fun buscarCategorias(query: String): List<Categoria>
+
+    // Consulta corregida con la tabla "tabla_tareas" y el campo "titulo"
+    @Query("SELECT * FROM tabla_tareas WHERE categoria = :nombreCategoria AND enPapelera = 0")
+    suspend fun obtenerTareasPorCategoria(nombreCategoria: String): List<Tarea>
 }

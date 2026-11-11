@@ -1,5 +1,6 @@
 package com.example.todolist
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -14,6 +15,7 @@ import kotlinx.coroutines.launch
 class InterfazUsuario : AppCompatActivity() {
 
     private lateinit var db: AppDatabase
+    private var idUsuarioLogueado: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,17 +31,32 @@ class InterfazUsuario : AppCompatActivity() {
         val btnCambiar = findViewById<Button>(R.id.btnCambiar)
         val btnLogout = findViewById<Button>(R.id.btnLogout)
 
-        // Cargar datos actuales desde Room
+        // 1. Obtener el ID del usuario actualmente logueado desde SharedPreferences
+        val prefs = getSharedPreferences("MiSesionApp", Context.MODE_PRIVATE)
+        idUsuarioLogueado = prefs.getInt("ID_USUARIO_LOGUEADO", -1)
+
+        // 2. Cargar ÚNICAMENTE los datos del usuario logueado
         lifecycleScope.launch {
             try {
-                val usuarios = db.usuarioDao().obtenerTodos()
-                if (usuarios.isNotEmpty()) {
-                    val usuarioActual = usuarios.last()
-                    etNombre.setText(usuarioActual.usuario)
-                    etCorreo.setText(usuarioActual.correo)
-                    etContrasena.setText(usuarioActual.contrasena)
-
-                    tvTitle?.text = "¡Hola, ${usuarioActual.usuario}!"
+                if (idUsuarioLogueado != -1) {
+                    val usuarioActual = db.usuarioDao().obtenerPorId(idUsuarioLogueado)
+                    usuarioActual?.let { user ->
+                        etNombre.setText(user.usuario)
+                        etCorreo.setText(user.correo)
+                        etContrasena.setText(user.contrasena)
+                        tvTitle?.text = "¡Hola, ${user.usuario}!"
+                    }
+                } else {
+                    // Si por alguna razón no hay ID, tomamos el último por respaldo
+                    val usuarios = db.usuarioDao().obtenerTodos()
+                    if (usuarios.isNotEmpty()) {
+                        val user = usuarios.last()
+                        idUsuarioLogueado = user.id
+                        etNombre.setText(user.usuario)
+                        etCorreo.setText(user.correo)
+                        etContrasena.setText(user.contrasena)
+                        tvTitle?.text = "¡Hola, ${user.usuario}!"
+                    }
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -51,7 +68,7 @@ class InterfazUsuario : AppCompatActivity() {
             finish()
         }
 
-        // Guardar cambios usando registrarUsuario
+        // Guardar cambios del usuario logueado
         btnCambiar.setOnClickListener {
             val nuevoNombre = etNombre.text.toString().trim()
             val nuevoCorreo = etCorreo.text.toString().trim()
@@ -60,14 +77,13 @@ class InterfazUsuario : AppCompatActivity() {
             if (nuevoNombre.isNotEmpty() && nuevoCorreo.isNotEmpty() && nuevaContrasena.isNotEmpty()) {
                 lifecycleScope.launch {
                     try {
-                        val usuarios = db.usuarioDao().obtenerTodos()
-                        if (usuarios.isNotEmpty()) {
-                            val usuarioActualizado = usuarios.last().copy(
+                        val usuarioActual = db.usuarioDao().obtenerPorId(idUsuarioLogueado)
+                        if (usuarioActual != null) {
+                            val usuarioActualizado = usuarioActual.copy(
                                 usuario = nuevoNombre,
                                 correo = nuevoCorreo,
                                 contrasena = nuevaContrasena
                             )
-                            // AQUÍ USAMOS registrarUsuario (que reemplaza al existir la misma PK)
                             db.usuarioDao().registrarUsuario(usuarioActualizado)
                             Toast.makeText(this@InterfazUsuario, "Cambios guardados correctamente", Toast.LENGTH_SHORT).show()
                             finish()
@@ -81,8 +97,13 @@ class InterfazUsuario : AppCompatActivity() {
             }
         }
 
-        // Cerrar Sesión
+        // Cerrar Sesión y LIMPIAR datos de sesión
         btnLogout.setOnClickListener {
+            // Borrar el ID del usuario de SharedPreferences
+            val editor = prefs.edit()
+            editor.clear()
+            editor.apply()
+
             val intent = Intent(this, InterfazLogin::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)

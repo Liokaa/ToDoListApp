@@ -1,5 +1,6 @@
 package com.example.todolist
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -41,6 +42,10 @@ class InterfazLogin : AppCompatActivity() {
                 val usuarioEncontrado = db.usuarioDao().login(userOrEmail, pass)
                 withContext(Dispatchers.Main) {
                     if (usuarioEncontrado != null) {
+                        // 💾 GUARDAR LA SESIÓN DEL USUARIO QUE ACABA DE INGRESAR
+                        val prefs = getSharedPreferences("MiSesionApp", Context.MODE_PRIVATE)
+                        prefs.edit().putInt("ID_USUARIO_LOGUEADO", usuarioEncontrado.id).apply()
+
                         Toast.makeText(this@InterfazLogin, "¡Bienvenido ${usuarioEncontrado.usuario}!", Toast.LENGTH_SHORT).show()
                         val intent = Intent(this@InterfazLogin, InterfazLista::class.java)
                         startActivity(intent)
