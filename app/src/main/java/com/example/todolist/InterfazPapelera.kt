@@ -35,7 +35,6 @@ class InterfazPapelera : AppCompatActivity() {
 
         db = AppDatabase.getDatabase(this)
 
-        // 1. Obtener ID del usuario actualmente logueado
         val prefs = getSharedPreferences("MiSesionApp", Context.MODE_PRIVATE)
         idUsuarioLogueado = prefs.getInt("ID_USUARIO_LOGUEADO", -1)
 
@@ -59,7 +58,6 @@ class InterfazPapelera : AppCompatActivity() {
         )
         rvPapelera.adapter = adapter
 
-        // Abrir el Drawer
         btnBurguer.setOnClickListener {
             drawerLayout.openDrawer(GravityCompat.START)
         }
@@ -67,7 +65,6 @@ class InterfazPapelera : AppCompatActivity() {
             drawerLayout.openDrawer(GravityCompat.START)
         }
 
-        // Navegación del Drawer Lateral
         navigationView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_calendario -> {
@@ -79,9 +76,7 @@ class InterfazPapelera : AppCompatActivity() {
                 R.id.nav_usuario -> {
                     startActivity(Intent(this, InterfazUsuario::class.java))
                 }
-                R.id.nav_papelera -> {
-                    // Ya estamos en Papelera
-                }
+                R.id.nav_papelera -> { }
                 else -> {
                     startActivity(Intent(this, InterfazLista::class.java))
                 }
@@ -91,10 +86,9 @@ class InterfazPapelera : AppCompatActivity() {
         }
 
         btnPapeleraIcon.setOnClickListener {
-            Toast.makeText(this, "Estás en la Papelera de tareas", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.you_are_in_trash), Toast.LENGTH_SHORT).show()
         }
 
-        // Filtrar papelera en tiempo real
         etBuscar.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -139,32 +133,32 @@ class InterfazPapelera : AppCompatActivity() {
 
     private fun mostrarDialogoRestaurar(tarea: Tarea) {
         AlertDialog.Builder(this)
-            .setTitle("Restaurar Tarea")
-            .setMessage("¿Deseas devolver \"${tarea.titulo}\" a tu lista principal?")
-            .setPositiveButton("Restaurar") { _, _ ->
+            .setTitle(getString(R.string.restore_task_title))
+            .setMessage(getString(R.string.restore_task_msg, tarea.titulo))
+            .setPositiveButton(getString(R.string.restore)) { _, _ ->
                 lifecycleScope.launch {
                     val tareaRestaurada = tarea.copy(enPapelera = false)
                     db.tareaDao().actualizarTarea(tareaRestaurada)
                     cargarTareasPapelera()
-                    Toast.makeText(this@InterfazPapelera, "Tarea restaurada", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@InterfazPapelera, getString(R.string.task_restored), Toast.LENGTH_SHORT).show()
                 }
             }
-            .setNegativeButton("Cancelar", null)
+            .setNegativeButton(getString(R.string.cancel), null)
             .show()
     }
 
     private fun eliminarDefinitivamente(tarea: Tarea) {
         AlertDialog.Builder(this)
-            .setTitle("Eliminar Permanentemente")
-            .setMessage("Esta acción no se puede deshacer. ¿Eliminar \"${tarea.titulo}\"?")
-            .setPositiveButton("Eliminar") { _, _ ->
+            .setTitle(getString(R.string.delete_permanent_title))
+            .setMessage(getString(R.string.delete_permanent_msg, tarea.titulo))
+            .setPositiveButton(getString(R.string.delete)) { _, _ ->
                 lifecycleScope.launch {
                     db.tareaDao().eliminarDefinitivo(tarea)
                     cargarTareasPapelera()
-                    Toast.makeText(this@InterfazPapelera, "Tarea eliminada por completo", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@InterfazPapelera, getString(R.string.task_deleted_permanently), Toast.LENGTH_SHORT).show()
                 }
             }
-            .setNegativeButton("Cancelar", null)
+            .setNegativeButton(getString(R.string.cancel), null)
             .show()
     }
 }

@@ -26,8 +26,8 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@android:drawable/ic_menu_preferences"
-            android:contentDescription="Configuración"
+            android:src="@drawable/ic_config_gear"
+            android:contentDescription="@string/config_title"
             app:tint="#FFFFFF" />
 
         <!-- Título Centrado "¡Hola!" -->
@@ -36,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="¡Hola!"
+            android:text="@string/hello_title"
             android:textColor="#FFFFFF"
             android:textSize="22sp"
             android:textStyle="bold" />
@@ -91,7 +91,7 @@
             android:id="@+id/lblNombre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nombre"
+            android:text="@string/name_label"
             android:textColor="#333333"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -103,7 +103,7 @@
             android:layout_marginTop="6dp"
             android:layout_marginBottom="16dp"
             android:background="@android:drawable/editbox_background_normal"
-            android:hint="Tu nombre"
+            android:hint="@string/name_hint"
             android:paddingHorizontal="12dp"
             android:textColor="#333333"
             android:textSize="15sp" />
@@ -113,7 +113,7 @@
             android:id="@+id/lblCorreo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Correo Electrónico"
+            android:text="@string/email_label"
             android:textColor="#333333"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -125,7 +125,7 @@
             android:layout_marginTop="6dp"
             android:layout_marginBottom="16dp"
             android:background="@android:drawable/editbox_background_normal"
-            android:hint="tu@correo.com"
+            android:hint="@string/email_hint"
             android:inputType="textEmailAddress"
             android:paddingHorizontal="12dp"
             android:textColor="#333333"
@@ -136,7 +136,7 @@
             android:id="@+id/lblContrasena"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Contraseña"
+            android:text="@string/password_label"
             android:textColor="#333333"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -148,7 +148,7 @@
             android:layout_marginTop="6dp"
             android:layout_marginBottom="24dp"
             android:background="@android:drawable/editbox_background_normal"
-            android:hint="••••••••"
+            android:hint="@string/password_hint"
             android:inputType="textPassword"
             android:paddingHorizontal="12dp"
             android:textColor="#333333"
@@ -160,7 +160,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:backgroundTint="#4A90E2"
-            android:text="Guardar Cambios"
+            android:text="@string/save_changes"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -175,7 +175,7 @@
         android:layout_marginHorizontal="24dp"
         android:layout_marginBottom="24dp"
         android:backgroundTint="#F8A5C2"
-        android:text="Cerrar Sesión ⇥"
+        android:text="@string/logout"
         android:textColor="#FFFFFF"
         android:textSize="16sp"
         android:textStyle="bold"

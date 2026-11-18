@@ -38,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="Calendario"
+                android:text="@string/calendar"
                 android:textColor="#FFFFFF"
                 android:textSize="22sp"
                 android:textStyle="bold" />
@@ -75,7 +75,7 @@
             android:layout_height="wrap_content"
             android:paddingHorizontal="16dp"
             android:paddingVertical="8dp"
-            android:text="Tareas del día"
+            android:text="@string/day_tasks_title"
             android:textColor="#333333"
             android:textSize="16sp"
             android:textStyle="bold" />

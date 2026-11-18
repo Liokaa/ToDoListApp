@@ -51,7 +51,7 @@ class InterfazCalendario : AppCompatActivity() {
 
         rvTareas.layoutManager = LinearLayoutManager(this)
 
-        // Configuración del TareaAdapter con el nuevo parámetro 'onEstadoCambiado'
+        // Configuración del TareaAdapter
         adapter = TareaAdapter(
             listaTareas = emptyList(),
             onEstadoCambiado = { tareaActualizada ->
@@ -65,11 +65,11 @@ class InterfazCalendario : AppCompatActivity() {
                     val tareaEnPapelera = tarea.copy(enPapelera = true)
                     db.tareaDao().actualizarTarea(tareaEnPapelera)
                     cargarTareasPorFecha(fechaFiltroActual)
-                    Toast.makeText(this@InterfazCalendario, "Tarea movida a la papelera", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@InterfazCalendario, getString(R.string.trash), Toast.LENGTH_SHORT).show()
                 }
             },
             onItemClicked = { tarea ->
-                Toast.makeText(this, "Tarea: ${tarea.titulo}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, tarea.titulo, Toast.LENGTH_SHORT).show()
             }
         )
         rvTareas.adapter = adapter
@@ -93,15 +93,15 @@ class InterfazCalendario : AppCompatActivity() {
             true
         }
 
-        // Seleccionar por defecto la fecha de HOY
+        // Seleccionar por defecto la fecha de HOY con formato traducido
         val cal = Calendar.getInstance()
         fechaFiltroActual = String.format("%02d/%02d/%d", cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.YEAR))
-        tvFechaSeleccionada.text = "Tareas para el $fechaFiltroActual"
+        tvFechaSeleccionada.text = getString(R.string.tasks_for_date, fechaFiltroActual)
 
         // Evento cuando el usuario toca un día en el CalendarView
         calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
             fechaFiltroActual = String.format("%02d/%02d/%d", dayOfMonth, month + 1, year)
-            tvFechaSeleccionada.text = "Tareas para el $fechaFiltroActual"
+            tvFechaSeleccionada.text = getString(R.string.tasks_for_date, fechaFiltroActual)
             cargarTareasPorFecha(fechaFiltroActual)
         }
 
@@ -116,7 +116,6 @@ class InterfazCalendario : AppCompatActivity() {
     private fun cargarTareasPorFecha(fechaStr: String) {
         lifecycleScope.launch {
             if (idUsuarioLogueado != -1) {
-                // Consultar tareas de esa fecha asociadas ÚNICAMENTE al usuario logueado
                 val tareasFiltradas = db.tareaDao().obtenerPorFecha(idUsuarioLogueado, fechaStr)
                 adapter.actualizarLista(tareasFiltradas)
             }

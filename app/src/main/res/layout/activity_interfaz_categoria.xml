@@ -41,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="Categorías"
+                android:text="@string/categories"
                 android:textColor="#FFFFFF"
                 android:textSize="22sp"
                 android:textStyle="bold" />
@@ -74,7 +74,7 @@
                 android:id="@+id/tvBuscar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Buscar"
+                android:text="@string/search_label"
                 android:textColor="#333333"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -86,7 +86,7 @@
                 android:layout_weight="1"
                 android:layout_marginStart="12dp"
                 android:background="@android:drawable/editbox_background_normal"
-                android:hint="🔍 Buscar categoría..."
+                android:hint="@string/search_category_hint"
                 android:textColor="#333333"
                 android:textColorHint="#888888"
                 android:paddingStart="15dp"

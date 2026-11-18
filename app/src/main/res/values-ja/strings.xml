@@ -28,4 +28,56 @@
     <string name="calendar">カレンダー</string>
     <string name="categories">カテゴリ</string>
     <string name="trash">ゴミ箱</string>
+    <string name="reset_config">デフォルト設定にリセット</string>
+    <string name="reset_config_success">デフォルト設定にリセットされました</string>
+
+    <string name="login_title">ログイン</string>
+    <string name="user_email_label">ユーザー名/メール :</string>
+    <string name="password_label">パスワード:</string>
+    <string name="register_button">新規登録></string>
+    <string name="login_button">ログイン</string>
+    <string name="or_continue_with">または以下で継続</string>
+    <string name="register_title">新規登録</string>
+    <string name="name_label">名前</string>
+    <string name="email_label">メールアドレス</string>
+    <string name="day_tasks_title">本日のタスク</string>
+    <string name="search_label">検索:</string>
+    <string name="search_category_hint">🔍 カテゴリを検索...</string>
+    <string name="search_trash_hint">ゴミ箱を検索...</string>
+    <string name="hello_title">こんにちは！</string>
+    <string name="name_hint">あなたの名前</string>
+    <string name="email_hint">your@email.com</string>
+    <string name="password_hint">••••••••</string>
+    <string name="task_list_menu">タスク一覧</string>
+
+    <!-- Additional translations for user, calendar, categories, and trash -->
+    <string name="hello_user_title">こんにちは、%sさん！</string>
+    <string name="tasks_for_date">%sのタスク</string>
+    <string name="new_category_dialog_title">新規カテゴリ</string>
+    <string name="category_name_hint">カテゴリ名（例：仕事）</string>
+    <string name="category_desc_hint">説明（任意）</string>
+    <string name="select_pastel_color">パステルカラーを選択:</string>
+    <string name="color_selected">カラーが選択されました</string>
+    <string name="color_already_used">その色はすでに他のカテゴリで使用されています。</string>
+    <string name="category_created">カテゴリ「%s」が作成されました</string>
+    <string name="name_cannot_be_empty">名前を空にすることはできません</string>
+    <string name="edit_category_dialog_title">カテゴリを編集</string>
+    <string name="update_button">更新</string>
+    <string name="color_belongs_to_other">その色はすでに別のカテゴリのものです</string>
+    <string name="category_updated">カテゴリが更新されました</string>
+    <string name="delete_category_dialog_title">カテゴリを削除</string>
+    <string name="delete_category_confirm_msg">カテゴリ「%s」を削除してもよろしいですか？</string>
+    <string name="delete">削除</string>
+    <string name="category_deleted">カテゴリが削除されました</string>
+    <string name="tasks_in_category">「%s」のタスク</string>
+    <string name="no_tasks_in_category">このカテゴリに割り当てられたタスクはありません。</string>
+    <string name="accept">OK</string>
+    <string name="restore_task_title">タスクを復元</string>
+    <string name="restore_task_msg">「%s」をメインリストに戻しますか？</string>
+    <string name="restore">復元</string>
+    <string name="task_restored">タスクが復元されました</string>
+    <string name="delete_permanent_title">完全に削除</string>
+    <string name="delete_permanent_msg">この操作は取り消せません。「%s」を削除しますか？</string>
+    <string name="task_deleted_permanently">タスクが完全に削除されました</string>
+    <string name="you_are_in_trash">タスクのゴミ箱にいます</string>
 </resources>

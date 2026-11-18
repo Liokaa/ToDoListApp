@@ -45,7 +45,7 @@ class InterfazUsuario : AppCompatActivity() {
             return
         }
 
-        // 3. Cargar ÚNICAMENTE los datos del usuario logueado
+        // 3. Cargar ÚNICAMENTE los datos del usuario logueado con título traducible
         lifecycleScope.launch {
             try {
                 val usuarioActual = db.usuarioDao().obtenerPorId(idUsuarioLogueado)
@@ -53,7 +53,7 @@ class InterfazUsuario : AppCompatActivity() {
                     etNombre.setText(usuarioActual.usuario)
                     etCorreo.setText(usuarioActual.correo)
                     etContrasena.setText(usuarioActual.contrasena)
-                    tvTitle?.text = "¡Hola, ${usuarioActual.usuario}!"
+                    tvTitle?.text = getString(R.string.hello_user_title, usuarioActual.usuario)
                 } else {
                     // Si el ID ya no existe en la BD, cerramos sesión
                     cerrarSesion(prefs)
@@ -91,15 +91,15 @@ class InterfazUsuario : AppCompatActivity() {
                                 contrasena = nuevaContrasena
                             )
                             db.usuarioDao().registrarUsuario(usuarioActualizado)
-                            Toast.makeText(this@InterfazUsuario, "Cambios guardados correctamente", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@InterfazUsuario, getString(R.string.save_changes), Toast.LENGTH_SHORT).show()
                             finish()
                         }
                     } catch (e: Exception) {
-                        Toast.makeText(this@InterfazUsuario, "Error al guardar cambios", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@InterfazUsuario, "Error", Toast.LENGTH_SHORT).show()
                     }
                 }
             } else {
-                Toast.makeText(this, "Por favor completa todos los campos", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.name_cannot_be_empty), Toast.LENGTH_SHORT).show()
             }
         }
 

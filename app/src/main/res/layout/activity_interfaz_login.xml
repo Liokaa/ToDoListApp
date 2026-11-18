@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:background="@drawable/bg_top_header"
-        android:text="Inicio Sesión"
+        android:text="@string/login_title"
         android:textSize="34sp"
         android:textStyle="bold"
         android:gravity="center"
@@ -28,11 +28,10 @@
             android:orientation="vertical"
             android:padding="24dp">
 
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Usuario/correo :"
+                android:text="@string/user_email_label"
                 android:textSize="22sp"
                 android:textStyle="bold"
                 android:textColor="#2D3748"
@@ -52,7 +51,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Contraseña:"
+                android:text="@string/password_label"
                 android:textSize="22sp"
                 android:textStyle="bold"
                 android:textColor="#2D3748"
@@ -80,13 +79,12 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-
             <TextView
                 android:id="@+id/btnRegister"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:text="Registrate>"
+                android:text="@string/register_button"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:textColor="#3D6C90"
@@ -95,28 +93,25 @@
                 android:clickable="true"
                 android:focusable="true" />
 
-
             <android.widget.Button
                 android:id="@+id/btnLogin"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
                 android:background="@drawable/bg_btn_primary"
-                android:text="Iniciar Sesión"
+                android:text="@string/login_button"
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="28dp" />
 
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="o continuar con"
+                android:text="@string/or_continue_with"
                 android:textSize="20sp"
                 android:textColor="#4A5568"
                 android:layout_marginBottom="20dp" />
-
 
             <LinearLayout
                 android:layout_width="match_parent"

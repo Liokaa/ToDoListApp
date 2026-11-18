@@ -1,6 +1,7 @@
 package com.example.todolist
 
 import android.os.Bundle
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.RadioButton
 import android.widget.RadioGroup
@@ -33,6 +34,7 @@ class InterfazConfig : AppCompatActivity() {
         val rbSpanish = findViewById<RadioButton>(R.id.rbSpanish)
         val rbEnglish = findViewById<RadioButton>(R.id.rbEnglish)
         val rbJapanese = findViewById<RadioButton>(R.id.rbJapanese)
+        val btnResetConfig = findViewById<Button>(R.id.btnResetConfig)
 
         btnBackConfig.setOnClickListener {
             finish()
@@ -106,6 +108,41 @@ class InterfazConfig : AppCompatActivity() {
                 val currentLocales = AppCompatDelegate.getApplicationLocales()
                 if (currentLocales.toLanguageTags() != langCode) {
                     val appLocale = LocaleListCompat.forLanguageTags(langCode)
+                    AppCompatDelegate.setApplicationLocales(appLocale)
+                }
+            }
+        }
+
+        // Botón para restablecer configuración a valores predeterminados
+        btnResetConfig.setOnClickListener {
+            lifecycleScope.launch {
+                isInitializing = true
+
+                // Valores por defecto: Modo Claro (false), Notificaciones desactivadas (false), Español ("es")
+                settingsDataStore.saveDarkMode(false)
+                settingsDataStore.saveNotifications(false)
+                settingsDataStore.saveLanguage("es")
+
+                rbLight.isChecked = true
+                switchNotifications.isChecked = false
+                rbSpanish.isChecked = true
+
+                isInitializing = false
+
+                Toast.makeText(
+                    this@InterfazConfig,
+                    getString(R.string.reset_config_success),
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                // Aplicar tema claro e idioma español si difieren
+                if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_NO) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                }
+
+                val currentLocales = AppCompatDelegate.getApplicationLocales()
+                if (currentLocales.toLanguageTags() != "es") {
+                    val appLocale = LocaleListCompat.forLanguageTags("es")
                     AppCompatDelegate.setApplicationLocales(appLocale)
                 }
             }

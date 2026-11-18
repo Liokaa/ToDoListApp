@@ -28,4 +28,56 @@
     <string name="calendar">Calendar</string>
     <string name="categories">Categories</string>
     <string name="trash">Trash</string>
+    <string name="reset_config">Reset to Default Settings</string>
+    <string name="reset_config_success">Settings reset to default values</string>
+
+    <string name="login_title">Log In</string>
+    <string name="user_email_label">Username/Email :</string>
+    <string name="password_label">Password:</string>
+    <string name="register_button">Register></string>
+    <string name="login_button">Log In</string>
+    <string name="or_continue_with">or continue with</string>
+    <string name="register_title">Register</string>
+    <string name="name_label">Name</string>
+    <string name="email_label">Email Address</string>
+    <string name="day_tasks_title">Tasks for the day</string>
+    <string name="search_label">Search:</string>
+    <string name="search_category_hint">🔍 Search category...</string>
+    <string name="search_trash_hint">Search in trash...</string>
+    <string name="hello_title">Hello!</string>
+    <string name="name_hint">Your name</string>
+    <string name="email_hint">your@email.com</string>
+    <string name="password_hint">••••••••</string>
+    <string name="task_list_menu">Task List</string>
+
+    <!-- Additional translations for user, calendar, categories, and trash -->
+    <string name="hello_user_title">Hello, %s!</string>
+    <string name="tasks_for_date">Tasks for %s</string>
+    <string name="new_category_dialog_title">New Category</string>
+    <string name="category_name_hint">Category name (e.g. Work)</string>
+    <string name="category_desc_hint">Description (optional)</string>
+    <string name="select_pastel_color">Select a pastel color:</string>
+    <string name="color_selected">Color selected</string>
+    <string name="color_already_used">That color is already used by another category, please pick another.</string>
+    <string name="category_created">Category \'%s\' created</string>
+    <string name="name_cannot_be_empty">Name cannot be empty</string>
+    <string name="edit_category_dialog_title">Edit Category</string>
+    <string name="update_button">Update</string>
+    <string name="color_belongs_to_other">That color already belongs to another category</string>
+    <string name="category_updated">Category updated</string>
+    <string name="delete_category_dialog_title">Delete Category</string>
+    <string name="delete_category_confirm_msg">Are you sure you want to delete category \'%s\'?</string>
+    <string name="delete">Delete</string>
+    <string name="category_deleted">Category deleted</string>
+    <string name="tasks_in_category">Tasks in \'%s\'</string>
+    <string name="no_tasks_in_category">No tasks assigned to this category.</string>
+    <string name="accept">OK</string>
+    <string name="restore_task_title">Restore Task</string>
+    <string name="restore_task_msg">Do you want to return \"%s\" to your main list?</string>
+    <string name="restore">Restore</string>
+    <string name="task_restored">Task restored</string>
+    <string name="delete_permanent_title">Delete Permanently</string>
+    <string name="delete_permanent_msg">This action cannot be undone. Delete \"%s\"?</string>
+    <string name="task_deleted_permanently">Task deleted permanently</string>
+    <string name="you_are_in_trash">You are in the Tasks Trash</string>
 </resources>

@@ -20,7 +20,7 @@
             android:id="@+id/reTitulo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Regístrate"
+            android:text="@string/register_title"
             android:textColor="@color/white"
             android:textSize="36sp"
             android:textStyle="bold" />
@@ -44,7 +44,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nombre"
+                android:text="@string/name_label"
                 android:textColor="#2A242B"
                 android:textSize="22sp"
                 android:textStyle="bold"
@@ -68,7 +68,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Correo"
+                android:text="@string/email_label"
                 android:textColor="#2A242B"
                 android:textSize="22sp"
                 android:textStyle="bold"
@@ -92,7 +92,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Contraseña"
+                android:text="@string/password_label"
                 android:textColor="#2A242B"
                 android:textSize="22sp"
                 android:textStyle="bold"
@@ -120,7 +120,7 @@
                 android:layout_gravity="center_horizontal"
                 android:background="@drawable/bg_pill_button_cyan"
                 app:backgroundTint="@null"
-                android:text="Regístrate"
+                android:text="@string/register_title"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="22sp"
@@ -135,7 +135,7 @@
                 android:layout_gravity="center_horizontal"
                 android:background="@drawable/bg_pill_button_cancel"
                 app:backgroundTint="@null"
-                android:text="Cancelar"
+                android:text="@string/cancel"
                 android:textAllCaps="false"
                 android:textColor="#4A3E48"
                 android:textSize="18sp"

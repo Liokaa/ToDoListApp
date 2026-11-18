@@ -36,7 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="Papelera"
+                android:text="@string/trash"
                 android:textColor="#FFFFFF"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -64,7 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="Buscar:"
+                android:text="@string/search_label"
                 android:textColor="#333333"
                 android:textSize="20sp"
                 android:textStyle="bold"/>
@@ -84,7 +84,7 @@
                     android:layout_height="45dp"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:hint="Buscar en papelera..."
+                    android:hint="@string/search_trash_hint"
                     android:inputType="text"
                     android:paddingStart="8dp"
                     android:textSize="16sp" />
