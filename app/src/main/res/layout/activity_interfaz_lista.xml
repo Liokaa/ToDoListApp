@@ -6,7 +6,7 @@
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FAF6E8">
+    android:background="@color/app_bg">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:gravity="center"
-                android:text="Interfaz Principal \n Lista de Tareas"
+                android:text="@string/main_title"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -64,7 +64,8 @@
             android:background="@android:drawable/editbox_background"
             android:drawableStart="@android:drawable/ic_menu_search"
             android:drawablePadding="8dp"
-            android:hint="Buscar tareas por título..."
+            android:textColor="@color/black"
+            android:hint="@string/search_hint"
             android:paddingHorizontal="12dp"
             android:textSize="14sp" />
 

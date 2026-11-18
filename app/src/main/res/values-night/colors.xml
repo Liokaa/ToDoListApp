@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="cian1">#4A90E2</color>
+    <color name="cian2">#357ABD</color>
+
+    <!-- Fondo dinámico para interfaces en Modo Oscuro -->
+    <color name="app_bg">#121212</color>
+    <color name="login_bg">#121212</color>
+    <color name="card_bg">#1E1E1E</color>
+    <color name="text_main">#E2E8F0</color>
+</resources>

@@ -1,9 +1,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Base.Theme.ToDoList" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
         <item name="fontFamily">@font/marko_one</item>
         <item name="android:fontFamily">@font/marko_one</item>
+        <item name="android:windowBackground">#FAF6E8</item>
+        <item name="colorSurface">#FFFFFF</item>
+        <item name="colorOnSurface">#2D3748</item>
+        <item name="colorPrimary">#4A90E2</item>
     </style>
 
     <style name="Theme.ToDoList" parent="Base.Theme.ToDoList" />

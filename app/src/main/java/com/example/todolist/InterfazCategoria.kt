@@ -37,7 +37,6 @@ class InterfazCategoria : AppCompatActivity() {
 
         db = AppDatabase.getDatabase(this)
 
-        // Obtener el ID del usuario con la sesión activa
         val prefs = getSharedPreferences("MiSesionApp", Context.MODE_PRIVATE)
         idUsuarioLogueado = prefs.getInt("ID_USUARIO_LOGUEADO", -1)
 
@@ -50,7 +49,6 @@ class InterfazCategoria : AppCompatActivity() {
         etBuscar = findViewById(R.id.etBuscar)
         rvCategorias = findViewById(R.id.rvCategorias)
 
-        // Configuración del RecyclerView usando las referencias corregidas del adapter
         rvCategorias.layoutManager = LinearLayoutManager(this)
         adapter = CategoriaAdapter(
             listaCategorias = emptyList(),
@@ -60,7 +58,6 @@ class InterfazCategoria : AppCompatActivity() {
         )
         rvCategorias.adapter = adapter
 
-        // Buscador filtrando solo entre categorías del usuario activo
         etBuscar.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -80,7 +77,7 @@ class InterfazCategoria : AppCompatActivity() {
             when (menuItem.itemId) {
                 R.id.nav_calendario -> startActivity(Intent(this, InterfazCalendario::class.java))
                 R.id.nav_papelera -> startActivity(Intent(this, InterfazPapelera::class.java))
-                R.id.nav_categoria -> { /* Ya estamos aquí */ }
+                R.id.nav_categoria -> { }
                 R.id.nav_usuario -> startActivity(Intent(this, InterfazUsuario::class.java))
                 else -> startActivity(Intent(this, InterfazLista::class.java))
             }
@@ -137,13 +134,13 @@ class InterfazCategoria : AppCompatActivity() {
         coloresMap.forEach { (btnId, hex) ->
             dialogView.findViewById<Button>(btnId)?.setOnClickListener {
                 colorHexSeleccionado = hex
-                Toast.makeText(this, "Color seleccionado", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.color_selected), Toast.LENGTH_SHORT).show()
             }
         }
 
         AlertDialog.Builder(this)
             .setView(dialogView)
-            .setPositiveButton("Guardar") { dialog, _ ->
+            .setPositiveButton(getString(R.string.save)) { dialog, _ ->
                 val nombre = etNombre.text.toString().trim()
                 val descripcion = etDescripcion.text.toString().trim()
 
@@ -153,7 +150,7 @@ class InterfazCategoria : AppCompatActivity() {
                         val colorUsado = existentes.any { it.colorHex.equals(colorHexSeleccionado, ignoreCase = true) }
 
                         if (colorUsado) {
-                            Toast.makeText(this@InterfazCategoria, "Ese color ya lo usa otra categoría, elige otro.", Toast.LENGTH_LONG).show()
+                            Toast.makeText(this@InterfazCategoria, getString(R.string.color_already_used), Toast.LENGTH_LONG).show()
                         } else {
                             val nuevaCat = Categoria(
                                 usuarioId = idUsuarioLogueado,
@@ -162,16 +159,16 @@ class InterfazCategoria : AppCompatActivity() {
                                 colorHex = colorHexSeleccionado
                             )
                             db.categoriaDao().insertar(nuevaCat)
-                            Toast.makeText(this@InterfazCategoria, "Categoría '$nombre' creada", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@InterfazCategoria, getString(R.string.category_created, nombre), Toast.LENGTH_SHORT).show()
                             cargarCategorias()
                         }
                     }
                 } else {
-                    Toast.makeText(this, "El nombre no puede estar vacío", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.name_cannot_be_empty), Toast.LENGTH_SHORT).show()
                 }
                 dialog.dismiss()
             }
-            .setNegativeButton("Cancelar") { dialog, _ -> dialog.cancel() }
+            .setNegativeButton(getString(R.string.cancel)) { dialog, _ -> dialog.cancel() }
             .show()
     }
 
@@ -199,9 +196,9 @@ class InterfazCategoria : AppCompatActivity() {
         }
 
         AlertDialog.Builder(this)
-            .setTitle("Editar Categoría")
+            .setTitle(getString(R.string.edit_category_dialog_title))
             .setView(dialogView)
-            .setPositiveButton("Actualizar") { dialog, _ ->
+            .setPositiveButton(getString(R.string.update_button)) { dialog, _ ->
                 val nuevoNombre = etNombre.text.toString().trim()
                 val nuevaDesc = etDescripcion.text.toString().trim()
 
@@ -213,7 +210,7 @@ class InterfazCategoria : AppCompatActivity() {
                         }
 
                         if (colorUsadoPorOtra) {
-                            Toast.makeText(this@InterfazCategoria, "Ese color ya pertenece a otra categoría", Toast.LENGTH_LONG).show()
+                            Toast.makeText(this@InterfazCategoria, getString(R.string.color_belongs_to_other), Toast.LENGTH_LONG).show()
                         } else {
                             val catActualizada = categoria.copy(
                                 nombre = nuevoNombre,
@@ -222,28 +219,28 @@ class InterfazCategoria : AppCompatActivity() {
                             )
                             db.categoriaDao().actualizar(catActualizada)
                             cargarCategorias()
-                            Toast.makeText(this@InterfazCategoria, "Categoría actualizada", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@InterfazCategoria, getString(R.string.category_updated), Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
                 dialog.dismiss()
             }
-            .setNegativeButton("Cancelar", null)
+            .setNegativeButton(getString(R.string.cancel), null)
             .show()
     }
 
     private fun confirmarEliminarCategoria(categoria: Categoria) {
         AlertDialog.Builder(this)
-            .setTitle("Eliminar Categoría")
-            .setMessage("¿Estás seguro de eliminar la categoría '${categoria.nombre}'?")
-            .setPositiveButton("Eliminar") { _, _ ->
+            .setTitle(getString(R.string.delete_category_dialog_title))
+            .setMessage(getString(R.string.delete_category_confirm_msg, categoria.nombre))
+            .setPositiveButton(getString(R.string.delete)) { _, _ ->
                 lifecycleScope.launch {
                     db.categoriaDao().eliminar(categoria)
                     cargarCategorias()
-                    Toast.makeText(this@InterfazCategoria, "Categoría eliminada", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@InterfazCategoria, getString(R.string.category_deleted), Toast.LENGTH_SHORT).show()
                 }
             }
-            .setNegativeButton("Cancelar", null)
+            .setNegativeButton(getString(R.string.cancel), null)
             .show()
     }
 
@@ -253,13 +250,13 @@ class InterfazCategoria : AppCompatActivity() {
             val listaTextos = if (tareas.isNotEmpty()) {
                 tareas.map { "• ${it.titulo}" }.toTypedArray()
             } else {
-                arrayOf("No hay tareas asignadas a esta categoría.")
+                arrayOf(getString(R.string.no_tasks_in_category))
             }
 
             AlertDialog.Builder(this@InterfazCategoria)
-                .setTitle("Tareas en '${categoria.nombre}'")
+                .setTitle(getString(R.string.tasks_in_category, categoria.nombre))
                 .setItems(listaTextos, null)
-                .setPositiveButton("Aceptar", null)
+                .setPositiveButton(getString(R.string.accept), null)
                 .show()
         }
     }

@@ -14,7 +14,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:contentDescription="Eliminar"
-        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel"
+        app:tint="#666666" />
     <TextView
         android:id="@+id/tvNombreItem"
         android:layout_width="wrap_content"
@@ -22,7 +23,7 @@
         android:layout_alignParentStart="true"
         android:layout_toStartOf="@id/btnEliminarItem"
         android:text="Nombre"
-        android:textColor="#000"
+        android:textColor="#2D3748"
         android:textSize="20sp"
         android:textStyle="bold"/>
     <TextView
@@ -33,7 +34,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginTop="4dp"
         android:text="Descripcion"
-        android:textColor="#444"
+        android:textColor="#4A5568"
         android:textSize="16sp"/>
 
 </RelativeLayout>

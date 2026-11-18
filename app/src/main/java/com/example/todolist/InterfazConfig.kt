@@ -1,0 +1,151 @@
+package com.example.todolist
+
+import android.os.Bundle
+import android.widget.Button
+import android.widget.ImageButton
+import android.widget.RadioButton
+import android.widget.RadioGroup
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
+import androidx.lifecycle.lifecycleScope
+import com.google.android.material.switchmaterial.SwitchMaterial
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+
+class InterfazConfig : AppCompatActivity() {
+
+    private lateinit var settingsDataStore: SettingsDataStore
+    private var isInitializing = true
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_interfaz_config)
+
+        settingsDataStore = SettingsDataStore(this)
+
+        val btnBackConfig = findViewById<ImageButton>(R.id.btnBackConfig)
+        val rgTheme = findViewById<RadioGroup>(R.id.rgTheme)
+        val rbLight = findViewById<RadioButton>(R.id.rbLight)
+        val rbDark = findViewById<RadioButton>(R.id.rbDark)
+        val switchNotifications = findViewById<SwitchMaterial>(R.id.switchNotifications)
+        val rgLanguage = findViewById<RadioGroup>(R.id.rgLanguage)
+        val rbSpanish = findViewById<RadioButton>(R.id.rbSpanish)
+        val rbEnglish = findViewById<RadioButton>(R.id.rbEnglish)
+        val rbJapanese = findViewById<RadioButton>(R.id.rbJapanese)
+        val btnResetConfig = findViewById<Button>(R.id.btnResetConfig)
+
+        btnBackConfig.setOnClickListener {
+            finish()
+        }
+
+        // Cargar estado inicial guardado en DataStore sin disparar listeners
+        lifecycleScope.launch {
+            isInitializing = true
+
+            val isDark = settingsDataStore.darkModeFlow.first()
+            val notificationsEnabled = settingsDataStore.notificationsFlow.first()
+            val languageCode = settingsDataStore.languageFlow.first()
+
+            if (isDark) {
+                rbDark.isChecked = true
+            } else {
+                rbLight.isChecked = true
+            }
+
+            switchNotifications.isChecked = notificationsEnabled
+
+            when (languageCode) {
+                "en" -> rbEnglish.isChecked = true
+                "ja" -> rbJapanese.isChecked = true
+                else -> rbSpanish.isChecked = true
+            }
+
+            isInitializing = false
+        }
+
+        // Guardar cambios de Modo Claro / Oscuro en DataStore
+        rgTheme.setOnCheckedChangeListener { _, checkedId ->
+            if (isInitializing) return@setOnCheckedChangeListener
+            val isDark = checkedId == R.id.rbDark
+
+            lifecycleScope.launch {
+                settingsDataStore.saveDarkMode(isDark)
+                val targetMode = if (isDark) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+                if (AppCompatDelegate.getDefaultNightMode() != targetMode) {
+                    AppCompatDelegate.setDefaultNightMode(targetMode)
+                }
+            }
+        }
+
+        // Guardar estado de Notificaciones en DataStore
+        switchNotifications.setOnCheckedChangeListener { _, isChecked ->
+            if (isInitializing) return@setOnCheckedChangeListener
+
+            lifecycleScope.launch {
+                settingsDataStore.saveNotifications(isChecked)
+                Toast.makeText(
+                    this@InterfazConfig,
+                    if (isChecked) "Notificaciones activadas" else "Notificaciones desactivadas",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
+        // Guardar selección de Idioma en DataStore
+        rgLanguage.setOnCheckedChangeListener { _, checkedId ->
+            if (isInitializing) return@setOnCheckedChangeListener
+
+            val langCode = when (checkedId) {
+                R.id.rbEnglish -> "en"
+                R.id.rbJapanese -> "ja"
+                else -> "es"
+            }
+
+            lifecycleScope.launch {
+                settingsDataStore.saveLanguage(langCode)
+                val currentLocales = AppCompatDelegate.getApplicationLocales()
+                if (currentLocales.toLanguageTags() != langCode) {
+                    val appLocale = LocaleListCompat.forLanguageTags(langCode)
+                    AppCompatDelegate.setApplicationLocales(appLocale)
+                }
+            }
+        }
+
+        // Botón para restablecer configuración a valores predeterminados
+        btnResetConfig.setOnClickListener {
+            lifecycleScope.launch {
+                isInitializing = true
+
+                // Valores por defecto: Modo Claro (false), Notificaciones desactivadas (false), Español ("es")
+                settingsDataStore.saveDarkMode(false)
+                settingsDataStore.saveNotifications(false)
+                settingsDataStore.saveLanguage("es")
+
+                rbLight.isChecked = true
+                switchNotifications.isChecked = false
+                rbSpanish.isChecked = true
+
+                isInitializing = false
+
+                Toast.makeText(
+                    this@InterfazConfig,
+                    getString(R.string.reset_config_success),
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                // Aplicar tema claro e idioma español si difieren
+                if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_NO) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                }
+
+                val currentLocales = AppCompatDelegate.getApplicationLocales()
+                if (currentLocales.toLanguageTags() != "es") {
+                    val appLocale = LocaleListCompat.forLanguageTags("es")
+                    AppCompatDelegate.setApplicationLocales(appLocale)
+                }
+            }
+        }
+    }
+}

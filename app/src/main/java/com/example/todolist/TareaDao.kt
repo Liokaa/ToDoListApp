@@ -26,7 +26,7 @@ interface TareaDao {
     suspend fun obtenerPorFecha(userId: Int, fechaTxt: String): List<Tarea>
 
     @Insert
-    suspend fun insertarTarea(tarea: Tarea)
+    suspend fun insertarTarea(tarea: Tarea): Long
 
     @Update
     suspend fun actualizarTarea(tarea: Tarea)
