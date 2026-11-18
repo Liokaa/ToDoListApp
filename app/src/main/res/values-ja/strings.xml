@@ -23,7 +23,7 @@
     <string name="save">保存</string>
     <string name="cancel">キャンセル</string>
     <string name="user_profile">ユーザープロフィール</string>
-    <string name="logout">ログアウト ⇥</string>
+    <string name="logout">ログアウト ►</string>
     <string name="save_changes">変更を保存</string>
     <string name="calendar">カレンダー</string>
     <string name="categories">カテゴリ</string>
