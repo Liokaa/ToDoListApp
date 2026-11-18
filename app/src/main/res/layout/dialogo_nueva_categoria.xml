@@ -8,10 +8,10 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nueva Categoría"
+        android:text="@string/new_category_dialog_title"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:textColor="#333333"
+        android:textColor="@color/text_main"
         android:layout_marginBottom="12dp" />
 
     <EditText
@@ -19,9 +19,9 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="@android:drawable/editbox_background_normal"
-        android:hint="Nombre de la categoría (ej: Trabajo)"
+        android:hint="@string/category_name_hint"
         android:paddingHorizontal="12dp"
-        android:textColor="#333333"
+        android:textColor="@color/text_main"
         android:textColorHint="#888888"
         android:textSize="14sp" />
 
@@ -31,17 +31,17 @@
         android:layout_height="48dp"
         android:layout_marginTop="8dp"
         android:background="@android:drawable/editbox_background_normal"
-        android:hint="Descripción (opcional)"
+        android:hint="@string/category_desc_hint"
         android:paddingHorizontal="12dp"
-        android:textColor="#333333"
+        android:textColor="@color/text_main"
         android:textColorHint="#888888"
         android:textSize="14sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Selecciona un color pastel:"
-        android:textColor="#555555"
+        android:text="@string/select_pastel_color"
+        android:textColor="@color/text_main"
         android:textSize="14sp"
         android:textStyle="bold"
         android:layout_marginTop="16dp"

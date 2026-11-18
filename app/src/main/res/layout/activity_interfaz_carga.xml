@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="@color/white"
+    android:background="@color/app_bg"
     android:padding="32dp">
 
     <View
@@ -26,28 +26,25 @@
         android:text="To Do List"
         android:textSize="28sp"
         android:textStyle="bold"
-        android:textColor="#617BE1"
+        android:textColor="@color/cian1"
         android:layout_marginTop="16dp" />
-
 
     <ProgressBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:indeterminateTint="#617BE1" />
-
+        android:indeterminateTint="@color/cian1" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="DSM 4-C (2026)"
         android:textSize="14sp"
-        android:textColor="#617BE1" />
+        android:textColor="@color/text_main" />
 
 </LinearLayout>

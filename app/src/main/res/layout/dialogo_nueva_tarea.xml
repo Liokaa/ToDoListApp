@@ -8,31 +8,33 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nueva Tarea"
+        android:text="@string/new_task"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:textColor="#333333"
+        android:textColor="@color/text_main"
         android:layout_marginBottom="12dp" />
 
     <EditText
         android:id="@+id/etTituloTarea"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Título de la tarea" />
+        android:textColor="@color/text_main"
+        android:hint="@string/task_title_hint" />
 
     <EditText
         android:id="@+id/etDescripcionTarea"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:hint="Descripción (opcional)" />
+        android:textColor="@color/text_main"
+        android:hint="@string/task_desc_hint" />
 
     <!-- Selector de Fecha con Calendario Pop-up -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Fecha límite:"
-        android:textColor="#555555"
+        android:text="@string/select_date"
+        android:textColor="@color/text_main"
         android:layout_marginTop="12dp" />
 
     <Button
@@ -41,15 +43,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:text="Seleccionar fecha"
+        android:text="@string/select_date"
         android:textAlignment="textStart" />
 
     <!-- Desplegable de Categorías creadas en Room -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Categoría:"
-        android:textColor="#555555"
+        android:text="@string/category_label"
+        android:textColor="@color/text_main"
         android:layout_marginTop="12dp" />
 
     <Spinner
