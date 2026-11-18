@@ -64,7 +64,6 @@
             android:background="@android:drawable/editbox_background"
             android:drawableStart="@android:drawable/ic_menu_search"
             android:drawablePadding="8dp"
-            android:textColor="@color/black"
             android:hint="@string/search_hint"
             android:paddingHorizontal="12dp"
             android:textSize="14sp" />
