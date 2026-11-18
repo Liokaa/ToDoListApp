@@ -17,7 +17,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="80dp"
-            android:background="#70B5F6"
+            android:background="#3794AC"
             android:paddingHorizontal="8dp"
             android:gravity="center_vertical">
 
@@ -91,7 +91,7 @@
                 android:layout_height="70dp"
                 android:text="+"
                 android:textColor="#FFFFFF"
-                android:backgroundTint="#4A90E2"
+                android:backgroundTint="#17467C"
                 android:textSize="30dp"/>
         </LinearLayout>
 
