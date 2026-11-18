@@ -18,12 +18,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- ID tvMenu conservado por si lo usas en el código -->
-        <View
-            android:id="@+id/tvMenu"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:visibility="gone" />
+        <!-- Botón Configuración (Ajustes) -->
+        <ImageButton
+            android:id="@+id/btnConfig"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_menu_preferences"
+            android:contentDescription="Configuración"
+            app:tint="#FFFFFF" />
 
         <!-- Título Centrado "¡Hola!" -->
         <TextView

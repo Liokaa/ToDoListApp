@@ -63,6 +63,12 @@ class InterfazUsuario : AppCompatActivity() {
             }
         }
 
+        // Abrir ventana de Configuración
+        val btnConfig = findViewById<View>(R.id.btnConfig)
+        btnConfig?.setOnClickListener {
+            startActivity(Intent(this, InterfazConfig::class.java))
+        }
+
         // Cerrar ventana con la '✕'
         tvClose?.setOnClickListener {
             finish()

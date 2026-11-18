@@ -53,6 +53,10 @@
             android:name=".InterfazUsuario"
             android:exported="false" />
 
+        <activity
+            android:name=".InterfazConfig"
+            android:exported="false" />
+
     </application>
 
 </manifest>

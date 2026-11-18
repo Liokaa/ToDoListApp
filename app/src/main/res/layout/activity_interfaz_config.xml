@@ -5,6 +5,177 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FAF6E8"
     tools:context=".InterfazConfig">
+
+    <!-- Header superior -->
+    <RelativeLayout
+        android:id="@+id/headerBackground"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="#92ECF6"
+        android:paddingHorizontal="16dp"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageButton
+            android:id="@+id/btnBackConfig"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_menu_revert"
+            android:contentDescription="Volver"
+            app:tint="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/tvTitleConfig"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Configuración"
+            android:textColor="#FFFFFF"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/headerBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <!-- Sección 1: Tema (Modo Claro / Oscuro) -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tema de la Aplicación"
+                android:textColor="#333333"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <RadioGroup
+                android:id="@+id/rgTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/reunded_linearlayout"
+                android:padding="16dp"
+                android:layout_marginBottom="24dp">
+
+                <RadioButton
+                    android:id="@+id/rbLight"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Modo Claro"
+                    android:textSize="16sp"
+                    android:textColor="#333333"
+                    android:paddingVertical="4dp" />
+
+                <RadioButton
+                    android:id="@+id/rbDark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Modo Oscuro"
+                    android:textSize="16sp"
+                    android:textColor="#333333"
+                    android:paddingVertical="4dp" />
+            </RadioGroup>
+
+            <!-- Sección 2: Notificaciones -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Notificaciones"
+                android:textColor="#333333"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/reunded_linearlayout"
+                android:padding="16dp"
+                android:layout_marginBottom="24dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Activar Notificaciones"
+                    android:textColor="#333333"
+                    android:textSize="16sp" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switchNotifications"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <!-- Sección 3: Idioma -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Idioma de la Aplicación"
+                android:textColor="#333333"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <RadioGroup
+                android:id="@+id/rgLanguage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/reunded_linearlayout"
+                android:padding="16dp"
+                android:layout_marginBottom="24dp">
+
+                <RadioButton
+                    android:id="@+id/rbSpanish"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Español"
+                    android:textSize="16sp"
+                    android:textColor="#333333"
+                    android:paddingVertical="4dp" />
+
+                <RadioButton
+                    android:id="@+id/rbEnglish"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="English"
+                    android:textSize="16sp"
+                    android:textColor="#333333"
+                    android:paddingVertical="4dp" />
+
+                <RadioButton
+                    android:id="@+id/rbJapanese"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="日本語"
+                    android:textSize="16sp"
+                    android:textColor="#333333"
+                    android:paddingVertical="4dp" />
+            </RadioGroup>
+
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
