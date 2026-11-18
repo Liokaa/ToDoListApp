@@ -1,3 +1,31 @@
 <resources>
     <string name="app_name">ToDoList</string>
+    <string name="config_title">Configuración</string>
+    <string name="theme_title">Tema de la Aplicación</string>
+    <string name="theme_light">Modo Claro</string>
+    <string name="theme_dark">Modo Oscuro</string>
+    <string name="notifications_title">Notificaciones</string>
+    <string name="notifications_enable">Activar Notificaciones</string>
+    <string name="language_title">Idioma de la Aplicación</string>
+    <string name="lang_spanish">Español</string>
+    <string name="lang_english">English</string>
+    <string name="lang_japanese">日本語</string>
+    <string name="main_title">Interfaz Principal \n Lista de Tareas</string>
+    <string name="search_hint">Buscar tareas por título...</string>
+    <string name="new_task">Nueva Tarea</string>
+    <string name="edit_task">Editar Tarea</string>
+    <string name="task_title_hint">Título de la tarea</string>
+    <string name="task_desc_hint">Descripción</string>
+    <string name="select_date">Seleccionar fecha</string>
+    <string name="custom_reminder">Recordatorio personalizado</string>
+    <string name="category_label">Categoría:</string>
+    <string name="status_label">Estado inicial:</string>
+    <string name="save">Guardar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="user_profile">Perfil de Usuario</string>
+    <string name="logout">Cerrar Sesión ⇥</string>
+    <string name="save_changes">Guardar Cambios</string>
+    <string name="calendar">Calendario</string>
+    <string name="categories">Categorías</string>
+    <string name="trash">Papelera</string>
 </resources>

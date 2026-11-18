@@ -38,8 +38,10 @@ class InterfazConfig : AppCompatActivity() {
             finish()
         }
 
-        // Cargar estado inicial guardado en DataStore
+        // Cargar estado inicial guardado en DataStore sin disparar listeners
         lifecycleScope.launch {
+            isInitializing = true
+
             val isDark = settingsDataStore.darkModeFlow.first()
             val notificationsEnabled = settingsDataStore.notificationsFlow.first()
             val languageCode = settingsDataStore.languageFlow.first()
@@ -68,13 +70,10 @@ class InterfazConfig : AppCompatActivity() {
 
             lifecycleScope.launch {
                 settingsDataStore.saveDarkMode(isDark)
-                val mode = if (isDark) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
-                AppCompatDelegate.setDefaultNightMode(mode)
-                Toast.makeText(
-                    this@InterfazConfig,
-                    if (isDark) "Modo Oscuro activado" else "Modo Claro activado",
-                    Toast.LENGTH_SHORT
-                ).show()
+                val targetMode = if (isDark) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+                if (AppCompatDelegate.getDefaultNightMode() != targetMode) {
+                    AppCompatDelegate.setDefaultNightMode(targetMode)
+                }
             }
         }
 
@@ -104,13 +103,11 @@ class InterfazConfig : AppCompatActivity() {
 
             lifecycleScope.launch {
                 settingsDataStore.saveLanguage(langCode)
-                val appLocale = LocaleListCompat.forLanguageTags(langCode)
-                AppCompatDelegate.setApplicationLocales(appLocale)
-                Toast.makeText(
-                    this@InterfazConfig,
-                    "Idioma actualizado: ${if (langCode == "en") "English" else if (langCode == "ja") "日本語" else "Español"}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                val currentLocales = AppCompatDelegate.getApplicationLocales()
+                if (currentLocales.toLanguageTags() != langCode) {
+                    val appLocale = LocaleListCompat.forLanguageTags(langCode)
+                    AppCompatDelegate.setApplicationLocales(appLocale)
+                }
             }
         }
     }

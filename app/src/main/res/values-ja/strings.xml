@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">ToDoList</string>
+    <string name="config_title">設定</string>
+    <string name="theme_title">アプリのテーマ</string>
+    <string name="theme_light">ライトモード</string>
+    <string name="theme_dark">ダークモード</string>
+    <string name="notifications_title">通知</string>
+    <string name="notifications_enable">通知を有効にする</string>
+    <string name="language_title">アプリの言語</string>
+    <string name="lang_spanish">Español</string>
+    <string name="lang_english">English</string>
+    <string name="lang_japanese">日本語</string>
+    <string name="main_title">メイン画面 \n タスク一覧</string>
+    <string name="search_hint">タイトルでタスクを検索...</string>
+    <string name="new_task">新規タスク</string>
+    <string name="edit_task">タスクを編集</string>
+    <string name="task_title_hint">タスクのタイトル</string>
+    <string name="task_desc_hint">説明</string>
+    <string name="select_date">日付を選択</string>
+    <string name="custom_reminder">カスタムリマインダー</string>
+    <string name="category_label">カテゴリ:</string>
+    <string name="status_label">初期ステータス:</string>
+    <string name="save">保存</string>
+    <string name="cancel">キャンセル</string>
+    <string name="user_profile">ユーザープロフィール</string>
+    <string name="logout">ログアウト ⇥</string>
+    <string name="save_changes">変更を保存</string>
+    <string name="calendar">カレンダー</string>
+    <string name="categories">カテゴリ</string>
+    <string name="trash">ゴミ箱</string>
+</resources>
