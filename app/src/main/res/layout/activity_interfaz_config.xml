@@ -13,7 +13,7 @@
         android:id="@+id/headerBackground"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:background="#92ECF6"
+        android:background="#64B5F6"
         android:paddingHorizontal="16dp"
         android:gravity="center_vertical"
         app:layout_constraintTop_toTopOf="parent"
@@ -29,7 +29,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@android:drawable/ic_menu_revert"
             android:contentDescription="@string/config_title"
-            app:tint="#FFFFFF" />
+            app:tint="#0D47A1" />
 
         <TextView
             android:id="@+id/tvTitleConfig"
@@ -73,6 +73,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:background="@drawable/reunded_linearlayout"
+                android:backgroundTint="#DCEDC8"
                 android:padding="16dp"
                 android:layout_marginBottom="24dp">
 
@@ -111,6 +112,7 @@
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
                 android:background="@drawable/reunded_linearlayout"
+                android:backgroundTint="#FFF9C4"
                 android:padding="16dp"
                 android:layout_marginBottom="24dp">
 
@@ -144,6 +146,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:background="@drawable/reunded_linearlayout"
+                android:backgroundTint="#E1F5FE"
                 android:padding="16dp"
                 android:layout_marginBottom="24dp">
 
@@ -180,7 +183,7 @@
                 android:id="@+id/btnResetConfig"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:backgroundTint="#F8A5C2"
+                android:backgroundTint="#F48FB1"
                 android:text="@string/reset_config"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp"
