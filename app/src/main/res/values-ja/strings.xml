@@ -50,7 +50,7 @@
     <string name="password_hint">••••••••</string>
     <string name="task_list_menu">タスク一覧</string>
 
-    <!-- Additional translations for user, calendar, categories, and trash -->
+    <!-- Additional translations -->
     <string name="hello_user_title">こんにちは、%sさん！</string>
     <string name="tasks_for_date">%sのタスク</string>
     <string name="new_category_dialog_title">新規カテゴリ</string>
@@ -80,4 +80,6 @@
     <string name="delete_permanent_msg">この操作は取り消せません。「%s」を削除しますか？</string>
     <string name="task_deleted_permanently">タスクが完全に削除されました</string>
     <string name="you_are_in_trash">タスクのゴミ箱にいます</string>
+    <string name="reminder_default_btn">リマインダー：1日前 (デフォルト) ⏰</string>
+    <string name="reminder_custom_btn">カスタムリマインダー ⏰</string>
 </resources>

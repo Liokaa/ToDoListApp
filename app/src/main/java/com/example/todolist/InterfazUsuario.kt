@@ -45,7 +45,7 @@ class InterfazUsuario : AppCompatActivity() {
             return
         }
 
-        // 3. Cargar ÚNICAMENTE los datos del usuario logueado con título traducible
+        // 3. Cargar ÚNICAMENTE los datos del usuario logueado con título traducido
         lifecycleScope.launch {
             try {
                 val usuarioActual = db.usuarioDao().obtenerPorId(idUsuarioLogueado)

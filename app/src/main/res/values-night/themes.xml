@@ -1,8 +1,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
     <style name="Base.Theme.ToDoList" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
         <item name="fontFamily">@font/marko_one</item>
         <item name="android:fontFamily">@font/marko_one</item>
+        <item name="android:windowBackground">#121212</item>
+        <item name="colorSurface">#1E1E1E</item>
+        <item name="colorOnSurface">#E2E8F0</item>
+        <item name="colorPrimary">#4A90E2</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
     </style>
 </resources>

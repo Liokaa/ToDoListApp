@@ -52,7 +52,6 @@ class InterfazLista : AppCompatActivity() {
 
         db = AppDatabase.getDatabase(this)
 
-        // 1. Obtener ID del usuario con sesión activa
         val prefs = getSharedPreferences("MiSesionApp", Context.MODE_PRIVATE)
         idUsuarioLogueado = prefs.getInt("ID_USUARIO_LOGUEADO", -1)
 
@@ -64,7 +63,6 @@ class InterfazLista : AppCompatActivity() {
         etBuscar = findViewById(R.id.etBuscarTarea)
         rvTareas = findViewById(R.id.rvTareasMain)
 
-        // Ajustar color del icono del menú hamburguesa según el Modo Claro u Oscuro
         val isDark = (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
         val burguerColor = if (isDark) Color.parseColor("#92ECF6") else Color.parseColor("#FFFFFF")
         btnBurguer.setNavigationIconTint(burguerColor)
@@ -174,7 +172,7 @@ class InterfazLista : AppCompatActivity() {
             db.tareaDao().actualizarTarea(tareaEnPapelera)
             NotificationScheduler.cancelarNotificacion(this@InterfazLista, tarea.id)
             cargarTareas()
-            Toast.makeText(this@InterfazLista, "Tarea enviada a la papelera", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@InterfazLista, getString(R.string.trash), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -200,7 +198,7 @@ class InterfazLista : AppCompatActivity() {
         // Selector de fecha de la tarea
         var fechaSeleccionada = tareaParaEditar?.fecha ?: ""
         val btnFecha = Button(this).apply {
-            text = if (fechaSeleccionada.isEmpty()) getString(R.string.select_date) else "Fecha: $fechaSeleccionada"
+            text = if (fechaSeleccionada.isEmpty()) getString(R.string.select_date) else "${getString(R.string.select_date)}: $fechaSeleccionada"
         }
 
         btnFecha.setOnClickListener {
@@ -209,7 +207,7 @@ class InterfazLista : AppCompatActivity() {
                 this,
                 { _, year, month, dayOfMonth ->
                     fechaSeleccionada = String.format("%02d/%02d/%d", dayOfMonth, month + 1, year)
-                    btnFecha.text = "Fecha: $fechaSeleccionada"
+                    btnFecha.text = "${getString(R.string.select_date)}: $fechaSeleccionada"
                 },
                 cal.get(Calendar.YEAR),
                 cal.get(Calendar.MONTH),
@@ -218,13 +216,13 @@ class InterfazLista : AppCompatActivity() {
             datePicker.show()
         }
 
-        // Selector de Recordatorio Personalizado
+        // Selector de Recordatorio Personalizado traducido
         var recordatorioCustomMillis: Long = tareaParaEditar?.recordatorioMillis ?: 0L
         val btnCustomReminder = Button(this).apply {
             text = if (recordatorioCustomMillis > 0L) {
-                "Recordatorio Personalizado ⏰"
+                getString(R.string.reminder_custom_btn)
             } else {
-                "Recordatorio: 1 día antes (Default) ⏰"
+                getString(R.string.reminder_default_btn)
             }
         }
 
@@ -240,7 +238,7 @@ class InterfazLista : AppCompatActivity() {
                                 set(year, month, dayOfMonth, hour, minute, 0)
                             }
                             recordatorioCustomMillis = customCal.timeInMillis
-                            btnCustomReminder.text = String.format("Recordatorio: %02d/%02d %02d:%02d ⏰", dayOfMonth, month + 1, hour, minute)
+                            btnCustomReminder.text = String.format("%s (%02d/%02d %02d:%02d)", getString(R.string.reminder_custom_btn), dayOfMonth, month + 1, hour, minute)
                         },
                         cal.get(Calendar.HOUR_OF_DAY),
                         cal.get(Calendar.MINUTE),
@@ -288,7 +286,6 @@ class InterfazLista : AppCompatActivity() {
         layout.addView(tvEstadoLabel)
         layout.addView(spinnerEstado)
 
-        // Cargar únicamente las categorías del usuario logueado
         lifecycleScope.launch {
             val categoriasGuardadas = db.categoriaDao().obtenerTodasDeUsuario(idUsuarioLogueado)
             val nombresCategorias = if (categoriasGuardadas.isEmpty()) {
@@ -336,7 +333,7 @@ class InterfazLista : AppCompatActivity() {
                     recordatorioMillis = recordatorioCustomMillis
                 )
             } else {
-                Toast.makeText(this, "El título no puede estar vacío", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.name_cannot_be_empty), Toast.LENGTH_SHORT).show()
             }
             dialog.dismiss()
         }
@@ -373,7 +370,7 @@ class InterfazLista : AppCompatActivity() {
                         recordatorioMillis = recordatorioMillis
                     )
                     idTareaGuardada = db.tareaDao().insertarTarea(nuevaTarea).toInt()
-                    Toast.makeText(this@InterfazLista, "¡Tarea creada!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@InterfazLista, getString(R.string.category_created, titulo), Toast.LENGTH_SHORT).show()
                 } else {
                     val tareaActualizada = tareaParaEditar.copy(
                         titulo = titulo,
@@ -386,10 +383,9 @@ class InterfazLista : AppCompatActivity() {
                     )
                     db.tareaDao().actualizarTarea(tareaActualizada)
                     idTareaGuardada = tareaParaEditar.id
-                    Toast.makeText(this@InterfazLista, "¡Tarea actualizada!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@InterfazLista, getString(R.string.category_updated), Toast.LENGTH_SHORT).show()
                 }
 
-                // Programar recordatorio (Custom o 1 día antes por defecto)
                 val millisProgramados = if (recordatorioMillis > 0L) {
                     recordatorioMillis
                 } else {

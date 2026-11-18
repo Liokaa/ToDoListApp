@@ -51,7 +51,6 @@ class InterfazCalendario : AppCompatActivity() {
 
         rvTareas.layoutManager = LinearLayoutManager(this)
 
-        // Configuración del TareaAdapter
         adapter = TareaAdapter(
             listaTareas = emptyList(),
             onEstadoCambiado = { tareaActualizada ->
@@ -93,7 +92,7 @@ class InterfazCalendario : AppCompatActivity() {
             true
         }
 
-        // Seleccionar por defecto la fecha de HOY con formato traducido
+        // Seleccionar por defecto la fecha de HOY traducida
         val cal = Calendar.getInstance()
         fechaFiltroActual = String.format("%02d/%02d/%d", cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.YEAR))
         tvFechaSeleccionada.text = getString(R.string.tasks_for_date, fechaFiltroActual)

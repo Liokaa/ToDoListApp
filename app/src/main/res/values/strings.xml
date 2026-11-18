@@ -50,7 +50,7 @@
     <string name="password_hint">••••••••</string>
     <string name="task_list_menu">Lista de Tareas</string>
 
-    <!-- Traducciones adicionales de usuario, calendario, categorías y papelera -->
+    <!-- Traducciones adicionales -->
     <string name="hello_user_title">¡Hola, %s!</string>
     <string name="tasks_for_date">Tareas para el %s</string>
     <string name="new_category_dialog_title">Nueva Categoría</string>
@@ -80,4 +80,6 @@
     <string name="delete_permanent_msg">Esta acción no se puede deshacer. ¿Eliminar \"%s\"?</string>
     <string name="task_deleted_permanently">Tarea eliminada por completo</string>
     <string name="you_are_in_trash">Estás en la Papelera de tareas</string>
+    <string name="reminder_default_btn">Recordatorio: 1 día antes (Predeterminado) ⏰</string>
+    <string name="reminder_custom_btn">Recordatorio Personalizado ⏰</string>
 </resources>
